@@ -13,7 +13,7 @@
 
     },
     "type": "magento2-module",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "license": "OSL 3.0",
     "autoload": {
         "files": [
@@ -22,13 +22,5 @@
         "psr-4": {
             "MSP\\Captcha\\": ""
         }
-    },
-    "extra": {
-        "map": [
-            [
-                "*",
-                "MSP/Captcha"
-            ]
-        ]
     }
 }
