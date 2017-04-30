@@ -31,17 +31,6 @@ class Data extends AbstractHelper
     const XML_PATH_GENERAL_PUBLIC_KEY = 'msp_securitysuite/recaptcha/public_key';
     const XML_PATH_GENERAL_PRIVATE_KEY = 'msp_securitysuite/recaptcha/private_key';
 
-    protected $scopeConfigInterface;
-
-    public function __construct(
-        Context $context,
-        ScopeConfigInterface $scopeConfigInterface
-    ) {
-        $this->scopeConfigInterface = $scopeConfigInterface;
-
-        parent::__construct($context);
-    }
-
     /**
      * Get error
      * @return string
@@ -57,7 +46,7 @@ class Data extends AbstractHelper
      */
     public function getPublicKey()
     {
-        return trim($this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_PUBLIC_KEY));
+        return trim($this->scopeConfig->getValue(self::XML_PATH_GENERAL_PUBLIC_KEY));
     }
 
     /**
@@ -66,7 +55,7 @@ class Data extends AbstractHelper
      */
     public function getPrivateKey()
     {
-        return trim($this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_PRIVATE_KEY));
+        return trim($this->scopeConfig->getValue(self::XML_PATH_GENERAL_PRIVATE_KEY));
     }
 
     /**
@@ -79,7 +68,7 @@ class Data extends AbstractHelper
             return false;
         }
 
-        return (bool) $this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_ENABLED_BACKEND);
+        return (bool) $this->scopeConfig->getValue(self::XML_PATH_GENERAL_ENABLED_BACKEND);
     }
 
     /**
@@ -92,6 +81,6 @@ class Data extends AbstractHelper
             return false;
         }
 
-        return (bool) $this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_ENABLED_FRONTEND);
+        return (bool) $this->scopeConfig->getValue(self::XML_PATH_GENERAL_ENABLED_FRONTEND);
     }
 }
