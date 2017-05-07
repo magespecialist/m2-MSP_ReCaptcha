@@ -6,7 +6,7 @@ Google reCaptcha module form Magento2.
 >
 > See: https://github.com/magespecialist/m2-MSP_SecuritySuiteFull
 
-Did you lock yourself out from Magento backend? <a href="https://github.com/magespecialist/m2-MSP_ReCaptcha/new/master?readme=1#emergency-commandline-disable">click here.</a>
+Did you lock yourself out from Magento backend? <a href="https://github.com/magespecialist/m2-MSP_ReCaptcha#emergency-commandline-disable">click here.</a>
 
 ## Installing on Magento2:
 
