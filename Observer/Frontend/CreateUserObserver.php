@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_ReCaptcha
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,27 +32,51 @@ use Magento\Framework\App\Action\Action;
 
 class CreateUserObserver implements ObserverInterface
 {
-    protected $validateInterface;
-    protected $helperData;
-    protected $messageManager;
-    protected $actionFlag;
-    protected $urlInterface;
-    protected $customerSession;
+    /**
+     * @var ValidateInterface
+     */
+    private $validate;
+
+    /**
+     * @var Data
+     */
+    private $helperData;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @var Session
+     */
+    private $customerSession;
+
+    /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
+
+    /**
+     * @var UrlInterface
+     */
+    private $url;
 
     public function __construct(
-        ValidateInterface $validateInterface,
+        ValidateInterface $validate,
         Data $helperData,
         ManagerInterface $messageManager,
         Session $customerSession,
         ActionFlag $actionFlag,
-        UrlInterface $urlInterface
+        UrlInterface $url
     ) {
-        $this->validateInterface = $validateInterface;
+
+        $this->validate = $validate;
         $this->helperData = $helperData;
         $this->messageManager = $messageManager;
-        $this->actionFlag = $actionFlag;
-        $this->urlInterface = $urlInterface;
         $this->customerSession = $customerSession;
+        $this->actionFlag = $actionFlag;
+        $this->url = $url;
     }
 
     public function execute(Observer $observer)
@@ -62,13 +86,13 @@ class CreateUserObserver implements ObserverInterface
         }
 
         $controller = $observer->getControllerAction();
-        if (!$this->validateInterface->validate()) {
-            $this->messageManager->addError($this->helperData->getErrorDescription());
+        if (!$this->validate->validate()) {
+            $this->messageManager->addErrorMessage($this->helperData->getErrorDescription());
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
 
             $this->customerSession->setCustomerFormData($controller->getRequest()->getPostValue());
 
-            $url = $this->urlInterface->getUrl('*/*/create', ['_secure' => true]);
+            $url = $this->url->getUrl('*/*/create', ['_secure' => true]);
 
             $controller->getResponse()->setRedirect($url);
         }

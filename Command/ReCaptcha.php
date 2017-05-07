@@ -29,16 +29,23 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ReCaptcha extends Command
 {
-    protected $configInterface;
-    protected $cacheManager;
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var Manager
+     */
+    private $cacheManager;
 
     public function __construct(
-        ConfigInterface $configInterface,
+        ConfigInterface $config,
         Manager $cacheManager
     ) {
-        $this->configInterface = $configInterface;
-        $this->cacheManager = $cacheManager;
         parent::__construct();
+        $this->config = $config;
+        $this->cacheManager = $cacheManager;
     }
 
     protected function configure()
@@ -51,8 +58,8 @@ class ReCaptcha extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->configInterface->saveConfig(
-            'msp_recaptcha/general/enabled_backend',
+        $this->config->saveConfig(
+            'msp_securitysuite/recaptcha/enabled_backend',
             '0',
             'default',
             0

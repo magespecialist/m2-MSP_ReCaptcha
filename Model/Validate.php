@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_ReCaptcha
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -26,25 +26,39 @@ use MSP\ReCaptcha\Api\ValidateInterface;
 use MSP\ReCaptcha\Helper\Data;
 use ReCaptcha\ReCaptcha;
 use Magento\Framework\App\RequestInterface;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class Validate implements ValidateInterface
 {
-    protected $requestInterface;
-    protected $remoteAddress;
-    protected $helperData;
-    protected $jsonDecoderInterface;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
+    /**
+     * @var Data
+     */
+    private $helperData;
+
+    /**
+     * @var DecoderInterface
+     */
+    private $jsonDecoder;
 
     public function __construct(
-        RequestInterface $requestInterface,
+        RequestInterface $request,
         RemoteAddress $remoteAddress,
         Data $helperData,
-        DecoderInterface $jsonDecoderInterface
+        DecoderInterface $jsonDecoder
     ) {
-        $this->requestInterface = $requestInterface;
+        $this->request = $request;
         $this->remoteAddress = $remoteAddress;
         $this->helperData = $helperData;
-        $this->jsonDecoderInterface = $jsonDecoderInterface;
+        $this->jsonDecoder = $jsonDecoder;
     }
 
     /**
@@ -57,14 +71,14 @@ class Validate implements ValidateInterface
 
         $userIp = $this->remoteAddress->getRemoteAddress();
 
-        $reCatchaResponse = $this->requestInterface->getParam('g-recaptcha-response', '');
+        $reCatchaResponse = $this->request->getParam('g-recaptcha-response', '');
 
         // Check if it is a JSON payload
         if (!$reCatchaResponse) {
-            $content = $this->requestInterface->getContent();
+            $content = $this->request->getContent();
             if ($content) {
                 try {
-                    $jsonParams = $this->jsonDecoderInterface->decode($content);
+                    $jsonParams = $this->jsonDecoder->decode($content);
                     if (isset($jsonParams['g-recaptcha-response'])) {
                         $reCatchaResponse = $jsonParams['g-recaptcha-response'];
                     }

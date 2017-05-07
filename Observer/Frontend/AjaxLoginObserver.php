@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_ReCaptcha
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,21 +30,37 @@ use Magento\Framework\App\Action\Action;
 
 class AjaxLoginObserver implements ObserverInterface
 {
-    protected $validateInterface;
-    protected $helperData;
-    protected $actionFlag;
-    protected $jsonEncoderInterface;
+    /**
+     * @var ValidateInterface
+     */
+    private $validate;
+
+    /**
+     * @var Data
+     */
+    private $helperData;
+
+    /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
+
+    /**
+     * @var EncoderInterface
+     */
+    private $jsonEncoder;
 
     public function __construct(
-        ValidateInterface $validateInterface,
+        ValidateInterface $validate,
         Data $helperData,
         ActionFlag $actionFlag,
-        EncoderInterface $jsonEncoderInterface
+        EncoderInterface $jsonEncoder
     ) {
-        $this->validateInterface = $validateInterface;
+
+        $this->validate = $validate;
         $this->helperData = $helperData;
         $this->actionFlag = $actionFlag;
-        $this->jsonEncoderInterface = $jsonEncoderInterface;
+        $this->jsonEncoder = $jsonEncoder;
     }
 
     public function execute(Observer $observer)
@@ -55,10 +71,10 @@ class AjaxLoginObserver implements ObserverInterface
 
         $controller = $observer->getControllerAction();
 
-        if (!$this->validateInterface->validate()) {
+        if (!$this->validate->validate()) {
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
             
-            $jsonPayload = $this->jsonEncoderInterface->encode([
+            $jsonPayload = $this->jsonEncoder->encode([
                 'errors' => true,
                 'message' => $this->helperData->getErrorDescription(),
             ]);

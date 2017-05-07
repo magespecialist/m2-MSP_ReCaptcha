@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_ReCaptcha
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,17 +31,6 @@ class Data extends AbstractHelper
     const XML_PATH_GENERAL_PUBLIC_KEY = 'msp_securitysuite/recaptcha/public_key';
     const XML_PATH_GENERAL_PRIVATE_KEY = 'msp_securitysuite/recaptcha/private_key';
 
-    protected $scopeConfigInterface;
-
-    public function __construct(
-        Context $context,
-        ScopeConfigInterface $scopeConfigInterface
-    ) {
-        $this->scopeConfigInterface = $scopeConfigInterface;
-
-        parent::__construct($context);
-    }
-
     /**
      * Get error
      * @return string
@@ -57,7 +46,7 @@ class Data extends AbstractHelper
      */
     public function getPublicKey()
     {
-        return trim($this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_PUBLIC_KEY));
+        return trim($this->scopeConfig->getValue(static::XML_PATH_GENERAL_PUBLIC_KEY));
     }
 
     /**
@@ -66,7 +55,7 @@ class Data extends AbstractHelper
      */
     public function getPrivateKey()
     {
-        return trim($this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_PRIVATE_KEY));
+        return trim($this->scopeConfig->getValue(static::XML_PATH_GENERAL_PRIVATE_KEY));
     }
 
     /**
@@ -79,7 +68,7 @@ class Data extends AbstractHelper
             return false;
         }
 
-        return (bool) $this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_ENABLED_BACKEND);
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_BACKEND);
     }
 
     /**
@@ -92,6 +81,6 @@ class Data extends AbstractHelper
             return false;
         }
 
-        return (bool) $this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_ENABLED_FRONTEND);
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND);
     }
 }

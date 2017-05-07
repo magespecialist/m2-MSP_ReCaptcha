@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_ReCaptcha
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,25 +32,48 @@ use Magento\Framework\App\Action\Action;
 
 class LoginObserver implements ObserverInterface
 {
-    protected $validateInterface;
-    protected $helperData;
-    protected $messageManager;
-    protected $actionFlag;
-    protected $sessionManagerInterface;
-    protected $customerUrl;
+    /**
+     * @var ValidateInterface
+     */
+    private $validate;
+
+    /**
+     * @var Data
+     */
+    private $helperData;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @var SessionManagerInterface
+     */
+    private $sessionManager;
+
+    /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
+
+    /**
+     * @var Url
+     */
+    private $customerUrl;
 
     public function __construct(
-        ValidateInterface $validateInterface,
+        ValidateInterface $validate,
         Data $helperData,
         ManagerInterface $messageManager,
-        SessionManagerInterface $sessionManagerInterface,
+        SessionManagerInterface $sessionManager,
         ActionFlag $actionFlag,
         Url $customerUrl
     ) {
-        $this->validateInterface = $validateInterface;
+        $this->validate = $validate;
         $this->helperData = $helperData;
         $this->messageManager = $messageManager;
-        $this->sessionManagerInterface = $sessionManagerInterface;
+        $this->sessionManager = $sessionManager;
         $this->actionFlag = $actionFlag;
         $this->customerUrl = $customerUrl;
     }
@@ -63,11 +86,11 @@ class LoginObserver implements ObserverInterface
 
         $controller = $observer->getControllerAction();
 
-        if (!$this->validateInterface->validate()) {
-            $beforeUrl = $this->sessionManagerInterface->getBeforeAuthUrl();
+        if (!$this->validate->validate()) {
+            $beforeUrl = $this->sessionManager->getBeforeAuthUrl();
             $url = $beforeUrl ?: $this->customerUrl->getLoginUrl();
 
-            $this->messageManager->addError($this->helperData->getErrorDescription());
+            $this->messageManager->addErrorMessage($this->helperData->getErrorDescription());
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
             $controller->getResponse()->setRedirect($url, ['_secure' => true]);
         }
