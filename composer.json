@@ -13,7 +13,6 @@
 
     },
     "type": "magento2-module",
-    "version": "0.1.4",
     "license": "OSL 3.0",
     "autoload": {
         "files": [
