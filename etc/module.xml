@@ -21,10 +21,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="MSP_ReCaptcha" setup_version="0.1.5">
+    <module name="MSP_ReCaptcha" setup_version="1.0.0">
         <sequence>
             <module name="MSP_Common"/>
-            <module name="MSP_SecuritySuite"/>
+            <module name="MSP_SecuritySuiteCommon"/>
         </sequence>
     </module>
 </config>

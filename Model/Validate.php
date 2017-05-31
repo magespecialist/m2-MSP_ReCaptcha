@@ -24,6 +24,8 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Json\DecoderInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
 use MSP\ReCaptcha\Helper\Data;
+use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
+use Magento\Framework\Event\ManagerInterface as EventInterface;
 use ReCaptcha\ReCaptcha;
 use Magento\Framework\App\RequestInterface;
 
@@ -49,16 +51,23 @@ class Validate implements ValidateInterface
      */
     private $jsonDecoder;
 
+    /**
+     * @var EventInterface
+     */
+    private $event;
+
     public function __construct(
         RequestInterface $request,
         RemoteAddress $remoteAddress,
         Data $helperData,
-        DecoderInterface $jsonDecoder
+        DecoderInterface $jsonDecoder,
+        EventInterface $event
     ) {
         $this->request = $request;
         $this->remoteAddress = $remoteAddress;
         $this->helperData = $helperData;
         $this->jsonDecoder = $jsonDecoder;
+        $this->event = $event;
     }
 
     /**
@@ -66,6 +75,20 @@ class Validate implements ValidateInterface
      * @return bool
      */
     public function validate()
+    {
+        if (!$this->_validate()) {
+            $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
+                'module' => 'MSP_ReCaptcha',
+                'message' => 'Invalid reCaptcha',
+            ]);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function _validate()
     {
         $secret = $this->helperData->getPrivateKey();
 
