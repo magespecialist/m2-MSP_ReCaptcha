@@ -25,10 +25,10 @@
         <section id="msp_securitysuite">
             <group id="recaptcha" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Google reCaptcha</label>
-                <field id="public_key" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="public_key" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Google API website key</label>
                 </field>
-                <field id="private_key" translate="label comment" type="password" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="private_key" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Google API secret key</label>
                 </field>
                 <field id="enabled_backend" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
