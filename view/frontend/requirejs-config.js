@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-<!--
 /**
  * MageSpecialist
  *
@@ -18,13 +16,13 @@
  * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="MSP_ReCaptcha" setup_version="1.0.2">
-        <sequence>
-            <module name="MSP_Common"/>
-            <module name="MSP_SecuritySuiteCommon"/>
-        </sequence>
-    </module>
-</config>
+
+var config = {
+  config: {
+    mixins: {
+      'Magento_Ui/js/view/messages': {
+        'MSP_ReCaptcha/js/ui-messages-mixin': true
+      }
+    }
+  }
+};

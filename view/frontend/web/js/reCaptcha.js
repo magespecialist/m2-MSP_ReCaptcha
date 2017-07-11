@@ -20,35 +20,38 @@
 /*browser:true jquery:true*/
 /*global define*/
 define(
-    [
-        'uiComponent',
-        'https://www.google.com/recaptcha/api.js'
-    ],
-    function (Component, reCaptcha) {
-        'use strict';
+  [
+    'uiComponent',
+    'MSP_ReCaptcha/js/registry',
+    'https://www.google.com/recaptcha/api.js'
+  ],
+  function (Component, registry, reCaptcha) {
+    'use strict';
 
-        return Component.extend({
-            defaults: {
-                template: 'MSP_ReCaptcha/reCaptcha'
-            },
-            getIsVisible: function() {
-                return window.mspReCaptchaConfig.enabled;
-            },
-            getSiteKey: function() {
-                return window.mspReCaptchaConfig.siteKey;
-            },
-            renderReCaptcha: function () {
-                grecaptcha.render(this.getReCaptchaId(), {
-                    'sitekey': this.getSiteKey()
-                });
-            },
-            getReCaptchaId: function () {
-                if (!this.reCaptchaId) {
-                    return 'msp-recaptcha';
-                }
+    return Component.extend({
+      defaults: {
+        template: 'MSP_ReCaptcha/reCaptcha'
+      },
+      getIsVisible: function () {
+        return window.mspReCaptchaConfig.enabled;
+      },
+      getSiteKey: function () {
+        return window.mspReCaptchaConfig.siteKey;
+      },
+      renderReCaptcha: function () {
+        registry.ids.push(this.getReCaptchaId());
 
-                return this.reCaptchaId;
-            }
-        });
-    }
+        registry.captchaList.push(grecaptcha.render(this.getReCaptchaId(), {
+          'sitekey': this.getSiteKey()
+        }));
+      },
+      getReCaptchaId: function () {
+        if (!this.reCaptchaId) {
+          return 'msp-recaptcha';
+        }
+
+        return this.reCaptchaId;
+      }
+    });
+  }
 );
