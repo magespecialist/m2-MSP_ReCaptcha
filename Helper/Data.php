@@ -26,10 +26,10 @@ use Magento\Framework\App\Helper\Context;
 
 class Data extends AbstractHelper
 {
-    const XML_PATH_GENERAL_ENABLED_BACKEND = 'msp_securitysuite/recaptcha/enabled_backend';
-    const XML_PATH_GENERAL_ENABLED_FRONTEND = 'msp_securitysuite/recaptcha/enabled_frontend';
-    const XML_PATH_GENERAL_PUBLIC_KEY = 'msp_securitysuite/recaptcha/public_key';
-    const XML_PATH_GENERAL_PRIVATE_KEY = 'msp_securitysuite/recaptcha/private_key';
+    const XML_PATH_GENERAL_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/general/enabled_backend';
+    const XML_PATH_GENERAL_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/general/enabled_frontend';
+    const XML_PATH_GENERAL_PUBLIC_KEY = 'msp_securitysuite_recaptcha/general/public_key';
+    const XML_PATH_GENERAL_PRIVATE_KEY = 'msp_securitysuite_recaptcha/general/private_key';
 
     /**
      * Get error

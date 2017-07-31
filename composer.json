@@ -3,9 +3,7 @@
     "description": "Google reCaptcha integration for Magento2 - Member of MageSpecialist SecuritySuite",
     "require": {
         "php": "~7.0.0",
-
-        "msp/common": "*",
-        "msp/security-suite-common": "*",
+        "msp/security-suite-common": "^1.2",
         "magento/magento-composer-installer": "*",
         "google/recaptcha": "^1.1"
     },
