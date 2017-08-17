@@ -33,7 +33,7 @@ define(
         template: 'MSP_ReCaptcha/reCaptcha'
       },
       getIsVisible: function () {
-        return window.mspReCaptchaConfig.enabled;
+        return window.mspReCaptchaConfig.enabled[this.zone];
       },
       getSiteKey: function () {
         return window.mspReCaptchaConfig.siteKey;

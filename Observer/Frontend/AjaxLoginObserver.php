@@ -24,9 +24,9 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Json\EncoderInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
-use MSP\ReCaptcha\Helper\Data;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Action\Action;
+use MSP\ReCaptcha\Model\Config;
 
 class AjaxLoginObserver implements ObserverInterface
 {
@@ -36,9 +36,9 @@ class AjaxLoginObserver implements ObserverInterface
     private $validate;
 
     /**
-     * @var Data
+     * @var Config
      */
-    private $helperData;
+    private $config;
 
     /**
      * @var ActionFlag
@@ -52,20 +52,20 @@ class AjaxLoginObserver implements ObserverInterface
 
     public function __construct(
         ValidateInterface $validate,
-        Data $helperData,
+        Config $config,
         ActionFlag $actionFlag,
         EncoderInterface $jsonEncoder
     ) {
 
         $this->validate = $validate;
-        $this->helperData = $helperData;
+        $this->config = $config;
         $this->actionFlag = $actionFlag;
         $this->jsonEncoder = $jsonEncoder;
     }
 
     public function execute(Observer $observer)
     {
-        if (!$this->helperData->getEnabledFrontend()) {
+        if (!$this->config->getEnabledFrontendLogin()) {
             return;
         }
 
@@ -76,7 +76,7 @@ class AjaxLoginObserver implements ObserverInterface
             
             $jsonPayload = $this->jsonEncoder->encode([
                 'errors' => true,
-                'message' => $this->helperData->getErrorDescription(),
+                'message' => $this->config->getErrorDescription(),
             ]);
             $controller->getResponse()->representJson($jsonPayload);
         }

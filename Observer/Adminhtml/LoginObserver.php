@@ -24,7 +24,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
 use Magento\Framework\Exception\Plugin\AuthenticationException;
-use MSP\ReCaptcha\Helper\Data;
+use MSP\ReCaptcha\Model\Config;
 
 class LoginObserver implements ObserverInterface
 {
@@ -34,21 +34,21 @@ class LoginObserver implements ObserverInterface
     private $validate;
 
     /**
-     * @var Data
+     * @var Config
      */
-    private $helperData;
+    private $config;
 
     public function __construct(
         ValidateInterface $validate,
-        Data $helperData
+        Config $config
     ) {
         $this->validate = $validate;
-        $this->helperData = $helperData;
+        $this->config = $config;
     }
 
     public function execute(Observer $observer)
     {
-        if (!$this->helperData->getEnabledBackend()) {
+        if (!$this->config->getEnabledBackend()) {
             return;
         }
 

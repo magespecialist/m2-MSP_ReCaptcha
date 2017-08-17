@@ -23,10 +23,16 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <msp_securitysuite_recaptcha>
-            <general>
-                <enabled_backend>0</enabled_backend>
-                <enabled_frontend>0</enabled_frontend>
-            </general>
+            <backend>
+                <enabled>0</enabled>
+            </backend>
+            <frontend>
+                <enabled>0</enabled>
+                <enabled_login>1</enabled_login>
+                <enabled_forgot>1</enabled_forgot>
+                <enabled_contact>1</enabled_contact>
+                <enabled_create>1</enabled_create>
+            </frontend>
         </msp_securitysuite_recaptcha>
     </default>
 </config>

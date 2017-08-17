@@ -36,6 +36,7 @@
                                     <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
                                     <item name="configSource" xsi:type="string">checkoutConfig</item>
                                     <item name="reCaptchaId" xsi:type="string">msp-recaptcha-popup-login</item>
+                                    <item name="zone" xsi:type="string">login</item>
                                 </item>
                             </item>
                         </item>

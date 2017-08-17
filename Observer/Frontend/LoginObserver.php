@@ -23,12 +23,12 @@ namespace MSP\ReCaptcha\Observer\Frontend;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
-use MSP\ReCaptcha\Helper\Data;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
+use MSP\ReCaptcha\Model\Config;
 
 class LoginObserver implements ObserverInterface
 {
@@ -38,9 +38,9 @@ class LoginObserver implements ObserverInterface
     private $validate;
 
     /**
-     * @var Data
+     * @var Config
      */
-    private $helperData;
+    private $config;
 
     /**
      * @var ManagerInterface
@@ -64,14 +64,14 @@ class LoginObserver implements ObserverInterface
 
     public function __construct(
         ValidateInterface $validate,
-        Data $helperData,
+        Config $config,
         ManagerInterface $messageManager,
         SessionManagerInterface $sessionManager,
         ActionFlag $actionFlag,
         Url $customerUrl
     ) {
         $this->validate = $validate;
-        $this->helperData = $helperData;
+        $this->config = $config;
         $this->messageManager = $messageManager;
         $this->sessionManager = $sessionManager;
         $this->actionFlag = $actionFlag;
@@ -80,7 +80,7 @@ class LoginObserver implements ObserverInterface
 
     public function execute(Observer $observer)
     {
-        if (!$this->helperData->getEnabledFrontend()) {
+        if (!$this->config->getEnabledFrontendLogin()) {
             return;
         }
 
@@ -90,7 +90,7 @@ class LoginObserver implements ObserverInterface
             $beforeUrl = $this->sessionManager->getBeforeAuthUrl();
             $url = $beforeUrl ?: $this->customerUrl->getLoginUrl();
 
-            $this->messageManager->addErrorMessage($this->helperData->getErrorDescription());
+            $this->messageManager->addErrorMessage($this->config->getErrorDescription());
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
             $controller->getResponse()->setRedirect($url, ['_secure' => true]);
         }

@@ -24,10 +24,10 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\UrlInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
-use MSP\ReCaptcha\Helper\Data;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Action\Action;
+use MSP\ReCaptcha\Model\Config;
 
 class ContactFormObserver implements ObserverInterface
 {
@@ -37,9 +37,9 @@ class ContactFormObserver implements ObserverInterface
     private $validate;
 
     /**
-     * @var Data
+     * @var Config
      */
-    private $helperData;
+    private $config;
 
     /**
      * @var ManagerInterface
@@ -58,13 +58,13 @@ class ContactFormObserver implements ObserverInterface
 
     public function __construct(
         ValidateInterface $validate,
-        Data $helperData,
+        Config $config,
         ManagerInterface $messageManager,
         ActionFlag $actionFlag,
         UrlInterface $url
     ) {
         $this->validate = $validate;
-        $this->helperData = $helperData;
+        $this->config = $config;
         $this->messageManager = $messageManager;
         $this->actionFlag = $actionFlag;
         $this->url = $url;
@@ -72,13 +72,13 @@ class ContactFormObserver implements ObserverInterface
 
     public function execute(Observer $observer)
     {
-        if (!$this->helperData->getEnabledFrontend()) {
+        if (!$this->config->getEnabledFrontendContact()) {
             return;
         }
 
         $controller = $observer->getControllerAction();
         if (!$this->validate->validate()) {
-            $this->messageManager->addErrorMessage($this->helperData->getErrorDescription());
+            $this->messageManager->addErrorMessage($this->config->getErrorDescription());
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
 
             $url = $this->url->getUrl('contact/index/index');

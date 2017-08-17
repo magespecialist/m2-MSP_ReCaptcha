@@ -21,23 +21,36 @@
 
 namespace MSP\ReCaptcha\Block\Frontend;
 
+use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\View\Element\Template;
-use MSP\ReCaptcha\Helper\Data;
+use MSP\ReCaptcha\Model\Config;
 
 class ReCaptcha extends Template
 {
     /**
-     * @var Data
+     * @var Config
      */
-    private $dataHelper;
+    private $config;
+    /**
+     * @var array
+     */
+    private $data;
+
+    /**
+     * @var EncoderInterface
+     */
+    private $encoder;
 
     public function __construct(
         Template\Context $context,
-        Data $dataHelper,
+        Config $config,
+        EncoderInterface $encoder,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->dataHelper = $dataHelper;
+        $this->config = $config;
+        $this->data = $data;
+        $this->encoder = $encoder;
     }
 
     /**
@@ -46,15 +59,6 @@ class ReCaptcha extends Template
      */
     public function getPublicKey()
     {
-        return $this->dataHelper->getPublicKey();
-    }
-
-    /**
-     * Return true if can display reCaptcha
-     * @return bool
-     */
-    public function canDisplayCaptcha()
-    {
-        return $this->dataHelper->getEnabledFrontend();
+        return $this->config->getPublicKey();
     }
 }

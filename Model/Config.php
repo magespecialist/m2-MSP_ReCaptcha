@@ -18,18 +18,31 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace MSP\ReCaptcha\Helper;
+namespace MSP\ReCaptcha\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
 
-class Data extends AbstractHelper
+class Config
 {
-    const XML_PATH_GENERAL_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/general/enabled_backend';
-    const XML_PATH_GENERAL_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/general/enabled_frontend';
+    const XML_PATH_GENERAL_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/backend/enabled';
+    const XML_PATH_GENERAL_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/frontend/enabled';
     const XML_PATH_GENERAL_PUBLIC_KEY = 'msp_securitysuite_recaptcha/general/public_key';
     const XML_PATH_GENERAL_PRIVATE_KEY = 'msp_securitysuite_recaptcha/general/private_key';
+
+    const XML_PATH_GENERAL_ENABLED_FRONTEND_LOGIN = 'msp_securitysuite_recaptcha/frontend/enabled_login';
+    const XML_PATH_GENERAL_ENABLED_FRONTEND_FORGOT = 'msp_securitysuite_recaptcha/frontend/enabled_forgot';
+    const XML_PATH_GENERAL_ENABLED_FRONTEND_CONTACT = 'msp_securitysuite_recaptcha/frontend/enabled_contact';
+    const XML_PATH_GENERAL_ENABLED_FRONTEND_CREATE = 'msp_securitysuite_recaptcha/frontend/enabled_create';
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    public function __construct(ScopeConfigInterface $scopeConfig)
+    {
+        $this->scopeConfig = $scopeConfig;
+    }
 
     /**
      * Get error
@@ -82,5 +95,57 @@ class Data extends AbstractHelper
         }
 
         return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND);
+    }
+
+    /**
+     * Return true if enabled on frontend login
+     * @return bool
+     */
+    public function getEnabledFrontendLogin()
+    {
+        if (!$this->getEnabledFrontend()) {
+            return false;
+        }
+
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND_LOGIN);
+    }
+
+    /**
+     * Return true if enabled on frontend forgot password
+     * @return bool
+     */
+    public function getEnabledFrontendForgot()
+    {
+        if (!$this->getEnabledFrontend()) {
+            return false;
+        }
+
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND_FORGOT);
+    }
+
+    /**
+     * Return true if enabled on frontend contact
+     * @return bool
+     */
+    public function getEnabledFrontendContact()
+    {
+        if (!$this->getEnabledFrontend()) {
+            return false;
+        }
+
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND_CONTACT);
+    }
+
+    /**
+     * Return true if enabled on frontend create user
+     * @return bool
+     */
+    public function getEnabledFrontendCreate()
+    {
+        if (!$this->getEnabledFrontend()) {
+            return false;
+        }
+
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND_CREATE);
     }
 }

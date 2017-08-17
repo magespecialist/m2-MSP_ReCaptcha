@@ -31,17 +31,5 @@
             <block class="MSP\ReCaptcha\Block\Config" name="msp_recaptcha.config"
                    template="MSP_ReCaptcha::msp_recaptcha/config.phtml" />
         </referenceContainer>
-
-        <referenceBlock name="msp-recaptcha">
-            <arguments>
-                <argument name="jsLayout" xsi:type="array">
-                    <item name="components" xsi:type="array">
-                        <item name="msp-recaptcha" xsi:type="array">
-                            <item name="component" xsi:type="string">MSP_ReCaptcha/js/reCaptcha</item>
-                        </item>
-                    </item>
-                </argument>
-            </arguments>
-        </referenceBlock>
     </body>
 </page>

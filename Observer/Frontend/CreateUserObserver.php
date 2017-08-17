@@ -25,10 +25,10 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\UrlInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
-use MSP\ReCaptcha\Helper\Data;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Action\Action;
+use MSP\ReCaptcha\Model\Config;
 
 class CreateUserObserver implements ObserverInterface
 {
@@ -38,9 +38,9 @@ class CreateUserObserver implements ObserverInterface
     private $validate;
 
     /**
-     * @var Data
+     * @var Config
      */
-    private $helperData;
+    private $config;
 
     /**
      * @var ManagerInterface
@@ -64,7 +64,7 @@ class CreateUserObserver implements ObserverInterface
 
     public function __construct(
         ValidateInterface $validate,
-        Data $helperData,
+        Config $config,
         ManagerInterface $messageManager,
         Session $customerSession,
         ActionFlag $actionFlag,
@@ -72,7 +72,7 @@ class CreateUserObserver implements ObserverInterface
     ) {
 
         $this->validate = $validate;
-        $this->helperData = $helperData;
+        $this->config = $config;
         $this->messageManager = $messageManager;
         $this->customerSession = $customerSession;
         $this->actionFlag = $actionFlag;
@@ -81,13 +81,13 @@ class CreateUserObserver implements ObserverInterface
 
     public function execute(Observer $observer)
     {
-        if (!$this->helperData->getEnabledFrontend()) {
+        if (!$this->config->getEnabledFrontendCreate()) {
             return;
         }
 
         $controller = $observer->getControllerAction();
         if (!$this->validate->validate()) {
-            $this->messageManager->addErrorMessage($this->helperData->getErrorDescription());
+            $this->messageManager->addErrorMessage($this->config->getErrorDescription());
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
 
             $this->customerSession->setCustomerFormData($controller->getRequest()->getPostValue());

@@ -47,6 +47,20 @@ class UpgradeData implements UpgradeDataInterface
         );
     }
 
+    protected function upgradeTo010101(ModuleDataSetupInterface $setup)
+    {
+        $this->configMigration->doConfigMigration(
+            $setup,
+            'msp_securitysuite_recaptcha/general/enabled_frontend',
+            'msp_securitysuite_recaptcha/frontend/enabled'
+        );
+        $this->configMigration->doConfigMigration(
+            $setup,
+            'msp_securitysuite_recaptcha/general/enabled_backend',
+            'msp_securitysuite_recaptcha/backend/enabled'
+        );
+    }
+
     /**
      * Upgrades data for a module
      *
@@ -60,6 +74,10 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '1.1.0') < 0) {
             $this->upgradeTo010100($setup);
+        }
+
+        if (version_compare($context->getVersion(), '1.2.0') < 0) {
+            $this->upgradeTo010101($setup);
         }
 
         $setup->endSetup();

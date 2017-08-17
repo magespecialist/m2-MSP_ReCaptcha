@@ -27,7 +27,19 @@
     <body>
         <referenceContainer name="form.additional.info">
             <block class="MSP\ReCaptcha\Block\Frontend\ReCaptcha" name="msp-recaptcha" after="-"
-                   template="MSP_ReCaptcha::msp_recaptcha.phtml" />
+                   template="MSP_ReCaptcha::msp_recaptcha.phtml">
+
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="msp-recaptcha" xsi:type="array">
+                                <item name="component" xsi:type="string">MSP_ReCaptcha/js/reCaptcha</item>
+                                <item name="zone" xsi:type="string">contact</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

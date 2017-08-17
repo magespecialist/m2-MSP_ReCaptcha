@@ -18,9 +18,8 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $block MSP\ReCaptcha\Block\Adminhtml\ReCaptcha */
+/** @var $block MSP\ReCaptcha\Block\Frontend\ReCaptcha */
 ?>
-<?php if ($block->canDisplayCaptcha()): ?>
 <div class="field-recaptcha" id="msp-recaptcha-container" data-bind="scope:'msp-recaptcha'">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
@@ -32,4 +31,3 @@
     }
 }
 </script>
-<?php endif; ?>
