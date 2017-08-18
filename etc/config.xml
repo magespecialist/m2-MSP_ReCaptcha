@@ -25,9 +25,16 @@
         <msp_securitysuite_recaptcha>
             <backend>
                 <enabled>0</enabled>
+                <size>normal</size>
+                <type>standard</type>
+                <theme>light</theme>
             </backend>
             <frontend>
                 <enabled>0</enabled>
+                <size>normal</size>
+                <type>standard</type>
+                <position>inline</position>
+                <theme>light</theme>
                 <enabled_login>1</enabled_login>
                 <enabled_forgot>1</enabled_forgot>
                 <enabled_contact>1</enabled_contact>

@@ -21,18 +21,30 @@
 namespace MSP\ReCaptcha\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use MSP\ReCaptcha\Model\Config\Source\Type;
 
 class Config
 {
-    const XML_PATH_GENERAL_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/backend/enabled';
-    const XML_PATH_GENERAL_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/frontend/enabled';
-    const XML_PATH_GENERAL_PUBLIC_KEY = 'msp_securitysuite_recaptcha/general/public_key';
-    const XML_PATH_GENERAL_PRIVATE_KEY = 'msp_securitysuite_recaptcha/general/private_key';
+    const XML_PATH_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/backend/enabled';
+    const XML_PATH_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/frontend/enabled';
 
-    const XML_PATH_GENERAL_ENABLED_FRONTEND_LOGIN = 'msp_securitysuite_recaptcha/frontend/enabled_login';
-    const XML_PATH_GENERAL_ENABLED_FRONTEND_FORGOT = 'msp_securitysuite_recaptcha/frontend/enabled_forgot';
-    const XML_PATH_GENERAL_ENABLED_FRONTEND_CONTACT = 'msp_securitysuite_recaptcha/frontend/enabled_contact';
-    const XML_PATH_GENERAL_ENABLED_FRONTEND_CREATE = 'msp_securitysuite_recaptcha/frontend/enabled_create';
+    const XML_PATH_TYPE_BACKEND = 'msp_securitysuite_recaptcha/backend/type';
+    const XML_PATH_TYPE_FRONTEND = 'msp_securitysuite_recaptcha/frontend/type';
+
+    const XML_PATH_POSITION_FRONTEND = 'msp_securitysuite_recaptcha/frontend/position';
+
+    const XML_PATH_SIZE_BACKEND = 'msp_securitysuite_recaptcha/backend/size';
+    const XML_PATH_SIZE_FRONTEND = 'msp_securitysuite_recaptcha/frontend/size';
+    const XML_PATH_THEME_BACKEND = 'msp_securitysuite_recaptcha/backend/theme';
+    const XML_PATH_THEME_FRONTEND = 'msp_securitysuite_recaptcha/frontend/theme';
+
+    const XML_PATH_PUBLIC_KEY = 'msp_securitysuite_recaptcha/general/public_key';
+    const XML_PATH_PRIVATE_KEY = 'msp_securitysuite_recaptcha/general/private_key';
+
+    const XML_PATH_ENABLED_FRONTEND_LOGIN = 'msp_securitysuite_recaptcha/frontend/enabled_login';
+    const XML_PATH_ENABLED_FRONTEND_FORGOT = 'msp_securitysuite_recaptcha/frontend/enabled_forgot';
+    const XML_PATH_ENABLED_FRONTEND_CONTACT = 'msp_securitysuite_recaptcha/frontend/enabled_contact';
+    const XML_PATH_ENABLED_FRONTEND_CREATE = 'msp_securitysuite_recaptcha/frontend/enabled_create';
 
     /**
      * @var ScopeConfigInterface
@@ -59,7 +71,7 @@ class Config
      */
     public function getPublicKey()
     {
-        return trim($this->scopeConfig->getValue(static::XML_PATH_GENERAL_PUBLIC_KEY));
+        return trim($this->scopeConfig->getValue(static::XML_PATH_PUBLIC_KEY));
     }
 
     /**
@@ -68,7 +80,7 @@ class Config
      */
     public function getPrivateKey()
     {
-        return trim($this->scopeConfig->getValue(static::XML_PATH_GENERAL_PRIVATE_KEY));
+        return trim($this->scopeConfig->getValue(static::XML_PATH_PRIVATE_KEY));
     }
 
     /**
@@ -81,7 +93,7 @@ class Config
             return false;
         }
 
-        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_BACKEND);
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_ENABLED_BACKEND);
     }
 
     /**
@@ -94,7 +106,7 @@ class Config
             return false;
         }
 
-        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND);
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_ENABLED_FRONTEND);
     }
 
     /**
@@ -107,7 +119,7 @@ class Config
             return false;
         }
 
-        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND_LOGIN);
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_ENABLED_FRONTEND_LOGIN);
     }
 
     /**
@@ -120,7 +132,7 @@ class Config
             return false;
         }
 
-        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND_FORGOT);
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_ENABLED_FRONTEND_FORGOT);
     }
 
     /**
@@ -133,7 +145,7 @@ class Config
             return false;
         }
 
-        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND_CONTACT);
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_ENABLED_FRONTEND_CONTACT);
     }
 
     /**
@@ -146,6 +158,89 @@ class Config
             return false;
         }
 
-        return (bool) $this->scopeConfig->getValue(static::XML_PATH_GENERAL_ENABLED_FRONTEND_CREATE);
+        return (bool) $this->scopeConfig->getValue(static::XML_PATH_ENABLED_FRONTEND_CREATE);
+    }
+
+    /**
+     * Get data size
+     * @return string
+     */
+    public function getFrontendSize()
+    {
+        if ($this->getFrontendType() == Type::TYPE_INVISIBLE) {
+            return 'invisible';
+        }
+
+        return $this->scopeConfig->getValue(static::XML_PATH_SIZE_FRONTEND);
+    }
+
+    /**
+     * Get data size
+     * @return string
+     */
+    public function getBackendSize()
+    {
+        if ($this->getBackendType() == Type::TYPE_INVISIBLE) {
+            return 'invisible';
+        }
+
+        return $this->scopeConfig->getValue(static::XML_PATH_SIZE_BACKEND);
+    }
+
+    /**
+     * Get data size
+     * @return string
+     */
+    public function getFrontendTheme()
+    {
+        if ($this->getFrontendType() == Type::TYPE_INVISIBLE) {
+            return null;
+        }
+
+        return $this->scopeConfig->getValue(static::XML_PATH_THEME_FRONTEND);
+    }
+
+    /**
+     * Get data size
+     * @return string
+     */
+    public function getBackendTheme()
+    {
+        if ($this->getBackendType() == Type::TYPE_INVISIBLE) {
+            return null;
+        }
+
+        return $this->scopeConfig->getValue(static::XML_PATH_THEME_BACKEND);
+    }
+
+    /**
+     * Get data size
+     * @return string
+     */
+    public function getFrontendPosition()
+    {
+        if ($this->getFrontendType() != Type::TYPE_INVISIBLE) {
+            return null;
+        }
+
+        return $this->scopeConfig->getValue(static::XML_PATH_POSITION_FRONTEND);
+    }
+
+    /**
+     * Get data size
+     * @return string
+     */
+    public function getFrontendType()
+    {
+        return $this->scopeConfig->getValue(static::XML_PATH_TYPE_FRONTEND);
+    }
+
+    /**
+     * Get data size
+     * @return string
+     */
+    public function getBackendType()
+    {
+        return $this->scopeConfig->getValue(static::XML_PATH_TYPE_BACKEND);
     }
 }

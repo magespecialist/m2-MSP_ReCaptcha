@@ -22,10 +22,12 @@
 define(
   [
     'uiComponent',
+    'jquery',
+    'ko',
     'MSP_ReCaptcha/js/registry',
     'https://www.google.com/recaptcha/api.js'
   ],
-  function (Component, registry, reCaptcha) {
+  function (Component, $, ko, registry, reCaptcha) {
     'use strict';
 
     return Component.extend({
@@ -35,15 +37,60 @@ define(
       getIsVisible: function () {
         return window.mspReCaptchaConfig.enabled[this.zone];
       },
-      getSiteKey: function () {
-        return window.mspReCaptchaConfig.siteKey;
+      reCaptchaCallback: function (token) {
+        if (window.mspReCaptchaConfig.size === 'invisible') {
+          this.tokenField.value = token;
+          this.$parentForm.submit();
+        }
+      },
+      initCaptcha: function () {
+        if (this.captchaInitialized) {
+          return;
+        }
+
+        this.captchaInitialized = true;
+
+        var $parentForm = $('#' + this.getReCaptchaId()).parents('form');
+        var me = this;
+
+        var widgetId = grecaptcha.render(this.getReCaptchaId(), {
+          'sitekey': window.mspReCaptchaConfig.siteKey,
+          'theme': window.mspReCaptchaConfig.theme,
+          'size': window.mspReCaptchaConfig.size,
+          'badge': this.badge ? this.badge : window.mspReCaptchaConfig.badge,
+          'callback': function (token) { me.reCaptchaCallback(token); }
+        });
+
+        if (window.mspReCaptchaConfig.size === 'invisible') {
+          $parentForm.submit(function (event) {
+            if (!me.tokenField.value) {
+              grecaptcha.execute(widgetId);
+              event.preventDefault(event);
+              event.stopImmediatePropagation();
+            }
+          });
+
+          // Move our (last) handler topmost. We need this to avoid submit bindings with ko.
+          var listeners = $._data($parentForm[0], 'events').submit;
+          listeners.unshift(listeners.pop());
+
+          // Create a virtual token field
+          this.tokenField = $('<input type="text" name="token" style="display: none" />')[0];
+          this.$parentForm = $parentForm;
+          $parentForm.append(this.tokenField);
+        } else {
+          this.tokenField = null;
+        }
+
+        registry.ids.push(this.getReCaptchaId());
+        registry.captchaList.push(widgetId);
+        registry.tokenFields.push(this.tokenField);
+
       },
       renderReCaptcha: function () {
-        registry.ids.push(this.getReCaptchaId());
-
-        registry.captchaList.push(grecaptcha.render(this.getReCaptchaId(), {
-          'sitekey': this.getSiteKey()
-        }));
+        if (this.getIsVisible()) {
+          this.initCaptcha();
+        }
       },
       getReCaptchaId: function () {
         if (!this.reCaptchaId) {

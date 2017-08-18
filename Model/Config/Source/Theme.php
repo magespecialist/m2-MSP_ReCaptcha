@@ -1,3 +1,4 @@
+<?php
 /**
  * MageSpecialist
  *
@@ -17,31 +18,37 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-define(['MSP_ReCaptcha/js/registry'], function (registry) {
-  'use strict';
+namespace MSP\ReCaptcha\Model\Config\Source;
 
-  return function (originalComponent) {
-    'use strict';
+class Theme implements \Magento\Framework\Option\ArrayInterface
+{
+    /**
+     * Options getter
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return [
+            ['value' => 'light', 'label' => __('Light Theme')],
+            ['value' => 'dark', 'label' => __('Dark Theme')],
+        ];
+    }
 
-    return originalComponent.extend({
-      initialize: function () {
-        this._super();
+    /**
+     * Get options in "key-value" format
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $options = $this->toOptionArray();
+        $return = [];
 
-        this.messageContainer.errorMessages.subscribe(function (newValue) {
-          var captchaList = registry.captchaList();
-          var tokenFieldsList = registry.tokenFields();
+        foreach ($options as $option) {
+            $return[$option['value']] = $option['label'];
+        }
 
-          for (var i=0; i<captchaList.length; i++) {
-            grecaptcha.reset(captchaList[i]);
-
-            if (tokenFieldsList[i]) {
-              tokenFieldsList[i].value = '';
-            }
-          }
-        }, null, "arrayChange");
-
-        return this;
-      }
-    });
-  };
-});
+        return $return;
+    }
+}

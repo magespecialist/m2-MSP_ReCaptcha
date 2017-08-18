@@ -52,6 +52,9 @@ class Config extends Template
     {
         return [
             'siteKey' => $this->config->getPublicKey(),
+            'size' => $this->config->getFrontendSize(),
+            'badge' => $this->config->getFrontendPosition(),
+            'theme' => $this->config->getFrontendTheme(),
             'enabled' => [
                 'login' => $this->config->getEnabledFrontendLogin(),
                 'create' => $this->config->getEnabledFrontendCreate(),
