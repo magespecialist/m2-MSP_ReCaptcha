@@ -29,9 +29,17 @@ MSP reCaptcha adds a recaptcha control to:
 - Contact form
 - Forgot password
 
-**Login example:**
+### Standard reCaptcha v2
 
 <img src="https://raw.githubusercontent.com/magespecialist/m2-MSP_ReCaptcha/master/screenshots/frontend.png" />
+
+### Invisible reCaptcha support
+
+Since version 1.3.0, we support Google invisible reCaptcha to avoid e-Commerce conversions loss.
+
+<img src="https://raw.githubusercontent.com/magespecialist/m2-MSP_ReCaptcha/master/screenshots/invisible_recaptcha.png" />
+
+<img src="https://raw.githubusercontent.com/magespecialist/m2-MSP_ReCaptcha/master/screenshots/invisible_recaptcha2.png" />
 
 ## Backend:
 
