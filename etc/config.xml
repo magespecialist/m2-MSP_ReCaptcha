@@ -26,7 +26,6 @@
             <backend>
                 <enabled>0</enabled>
                 <size>normal</size>
-                <type>standard</type>
                 <theme>light</theme>
             </backend>
             <frontend>

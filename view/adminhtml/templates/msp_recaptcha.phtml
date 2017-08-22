@@ -22,6 +22,10 @@
 ?>
 <?php if ($block->canDisplayCaptcha()): ?>
 <div class="admin__field field-recaptcha">
-    <div class="g-recaptcha" data-sitekey="<?php echo $block->getPublicKey() ?>"></div>
+    <div class="g-recaptcha"
+         data-sitekey="<?php echo $block->getPublicKey() ?>"
+         data-size="<?php echo $block->getSize() ?>"
+         data-theme="<?php echo $block->getTheme() ?>"
+    ></div>
 </div>
 <?php endif; ?>

@@ -72,6 +72,7 @@ define(
 
           // Move our (last) handler topmost. We need this to avoid submit bindings with ko.
           var listeners = $._data($parentForm[0], 'events').submit;
+          debugger;
           listeners.unshift(listeners.pop());
 
           // Create a virtual token field

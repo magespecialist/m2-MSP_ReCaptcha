@@ -28,7 +28,6 @@ class Config
     const XML_PATH_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/backend/enabled';
     const XML_PATH_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/frontend/enabled';
 
-    const XML_PATH_TYPE_BACKEND = 'msp_securitysuite_recaptcha/backend/type';
     const XML_PATH_TYPE_FRONTEND = 'msp_securitysuite_recaptcha/frontend/type';
 
     const XML_PATH_POSITION_FRONTEND = 'msp_securitysuite_recaptcha/frontend/position';
@@ -180,10 +179,6 @@ class Config
      */
     public function getBackendSize()
     {
-        if ($this->getBackendType() == Type::TYPE_INVISIBLE) {
-            return 'invisible';
-        }
-
         return $this->scopeConfig->getValue(static::XML_PATH_SIZE_BACKEND);
     }
 
@@ -206,10 +201,6 @@ class Config
      */
     public function getBackendTheme()
     {
-        if ($this->getBackendType() == Type::TYPE_INVISIBLE) {
-            return null;
-        }
-
         return $this->scopeConfig->getValue(static::XML_PATH_THEME_BACKEND);
     }
 
@@ -233,14 +224,5 @@ class Config
     public function getFrontendType()
     {
         return $this->scopeConfig->getValue(static::XML_PATH_TYPE_FRONTEND);
-    }
-
-    /**
-     * Get data size
-     * @return string
-     */
-    public function getBackendType()
-    {
-        return $this->scopeConfig->getValue(static::XML_PATH_TYPE_BACKEND);
     }
 }

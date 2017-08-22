@@ -55,6 +55,24 @@ class ReCaptcha extends Template
     }
 
     /**
+     * Get backend theme
+     * @return string
+     */
+    public function getTheme()
+    {
+        return $this->config->getBackendTheme();
+    }
+
+    /**
+     * Get backend size
+     * @return string
+     */
+    public function getSize()
+    {
+        return $this->config->getBackendSize();
+    }
+
+    /**
      * Return true if can display reCaptcha
      * @return bool
      */
