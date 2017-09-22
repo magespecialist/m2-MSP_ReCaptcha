@@ -22,7 +22,6 @@ namespace MSP\ReCaptcha\Command;
 
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
-use MSP\ReCaptcha\Helper\Data;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
