@@ -69,12 +69,13 @@ define(
                 $parentForm = $('#' + this.getReCaptchaId()).parents('form');
                 me = this;
 
+                // eslint-disable-next-line no-undef
                 widgetId = grecaptcha.render(this.getReCaptchaId(), {
                     'sitekey': window.mspReCaptchaConfig.siteKey,
                     'theme': window.mspReCaptchaConfig.theme,
                     'size': window.mspReCaptchaConfig.size,
                     'badge': this.badge ? this.badge : window.mspReCaptchaConfig.badge,
-                    'callback': function (token) {
+                    'callback': function (token) { // jscs:ignore jsDoc
                         me.reCaptchaCallback(token);
                     }
                 });
@@ -82,6 +83,7 @@ define(
                 if (window.mspReCaptchaConfig.size === 'invisible') {
                     $parentForm.submit(function (event) {
                         if (!me.tokenField.value) {
+                            // eslint-disable-next-line no-undef
                             grecaptcha.execute(widgetId);
                             event.preventDefault(event);
                             event.stopImmediatePropagation();

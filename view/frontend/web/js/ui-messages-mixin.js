@@ -28,13 +28,14 @@ define(['MSP_ReCaptcha/js/registry'], function (registry) {
             initialize: function () {
                 this._super();
 
-                this.messageContainer.errorMessages.subscribe(function (newValue) {
+                this.messageContainer.errorMessages.subscribe(function () {
                     var
                         i,
                         captchaList = registry.captchaList(),
                         tokenFieldsList = registry.tokenFields();
 
                     for (i = 0; i < captchaList.length; i++) {
+                        // eslint-disable-next-line no-undef
                         grecaptcha.reset(captchaList[i]);
 
                         if (tokenFieldsList[i]) {
