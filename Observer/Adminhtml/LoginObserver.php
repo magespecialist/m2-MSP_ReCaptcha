@@ -22,6 +22,7 @@ namespace MSP\ReCaptcha\Observer\Adminhtml;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use MSP\ReCaptcha\Api\ValidateInterface;
 use Magento\Framework\Exception\Plugin\AuthenticationException;
 use MSP\ReCaptcha\Model\Config;
@@ -38,16 +39,25 @@ class LoginObserver implements ObserverInterface
      */
     private $config;
 
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
     public function __construct(
         ValidateInterface $validate,
-        Config $config
+        Config $config,
+        RemoteAddress $remoteAddress
     ) {
         $this->validate = $validate;
         $this->config = $config;
+        $this->remoteAddress = $remoteAddress;
     }
 
     /**
      * @SuppressWarnings("PHPMD.UnusedFormalParameter")
+     * @param Observer $observer
+     * @throws AuthenticationException
      */
     public function execute(Observer $observer)
     {
@@ -55,8 +65,15 @@ class LoginObserver implements ObserverInterface
             return;
         }
 
-        if (!$this->validate->validate()) {
-            throw new AuthenticationException(__('Incorrect reCaptcha'));
+        /** @var \Magento\Framework\App\Action\Action $controller */
+        $controller = $observer->getControllerAction();
+        $request = $controller->getRequest();
+
+        $reCaptchaResponse = $request->getParam(ValidateInterface::PARAM_RECAPTCHA_RESPONSE);
+        $remoteIp = $this->remoteAddress->getRemoteAddress();
+
+        if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
+            throw new AuthenticationException($this->config->getErrorDescription());
         }
     }
 }

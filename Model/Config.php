@@ -21,6 +21,7 @@
 namespace MSP\ReCaptcha\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Phrase;
 use MSP\ReCaptcha\Model\Config\Source\Type;
 
 class Config
@@ -57,7 +58,7 @@ class Config
 
     /**
      * Get error
-     * @return string
+     * @return Phrase
      */
     public function getErrorDescription()
     {

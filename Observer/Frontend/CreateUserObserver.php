@@ -23,6 +23,7 @@ namespace MSP\ReCaptcha\Observer\Frontend;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\UrlInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
 use Magento\Framework\Message\ManagerInterface;
@@ -62,13 +63,19 @@ class CreateUserObserver implements ObserverInterface
      */
     private $url;
 
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
     public function __construct(
         ValidateInterface $validate,
         Config $config,
         ManagerInterface $messageManager,
         Session $customerSession,
         ActionFlag $actionFlag,
-        UrlInterface $url
+        UrlInterface $url,
+        RemoteAddress $remoteAddress
     ) {
 
         $this->validate = $validate;
@@ -77,6 +84,7 @@ class CreateUserObserver implements ObserverInterface
         $this->customerSession = $customerSession;
         $this->actionFlag = $actionFlag;
         $this->url = $url;
+        $this->remoteAddress = $remoteAddress;
     }
 
     public function execute(Observer $observer)
@@ -85,12 +93,18 @@ class CreateUserObserver implements ObserverInterface
             return;
         }
 
+        /** @var \Magento\Framework\App\Action\Action $controller */
         $controller = $observer->getControllerAction();
-        if (!$this->validate->validate()) {
+        $request = $controller->getRequest();
+
+        $reCaptchaResponse = $request->getParam(ValidateInterface::PARAM_RECAPTCHA_RESPONSE);
+        $remoteIp = $this->remoteAddress->getRemoteAddress();
+
+        if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
             $this->messageManager->addErrorMessage($this->config->getErrorDescription());
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
 
-            $this->customerSession->setCustomerFormData($controller->getRequest()->getPostValue());
+            $this->customerSession->setCustomerFormData($request->getPostValue());
 
             $url = $this->url->getUrl('*/*/create', ['_secure' => true]);
 

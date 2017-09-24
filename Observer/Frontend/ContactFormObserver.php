@@ -22,6 +22,7 @@ namespace MSP\ReCaptcha\Observer\Frontend;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\UrlInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
 use Magento\Framework\Message\ManagerInterface;
@@ -56,18 +57,25 @@ class ContactFormObserver implements ObserverInterface
      */
     private $url;
 
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
     public function __construct(
         ValidateInterface $validate,
         Config $config,
         ManagerInterface $messageManager,
         ActionFlag $actionFlag,
-        UrlInterface $url
+        UrlInterface $url,
+        RemoteAddress $remoteAddress
     ) {
         $this->validate = $validate;
         $this->config = $config;
         $this->messageManager = $messageManager;
         $this->actionFlag = $actionFlag;
         $this->url = $url;
+        $this->remoteAddress = $remoteAddress;
     }
 
     public function execute(Observer $observer)
@@ -76,8 +84,14 @@ class ContactFormObserver implements ObserverInterface
             return;
         }
 
+        /** @var \Magento\Framework\App\Action\Action $controller */
         $controller = $observer->getControllerAction();
-        if (!$this->validate->validate()) {
+        $request = $controller->getRequest();
+
+        $reCaptchaResponse = $request->getParam(ValidateInterface::PARAM_RECAPTCHA_RESPONSE);
+        $remoteIp = $this->remoteAddress->getRemoteAddress();
+
+        if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
             $this->messageManager->addErrorMessage($this->config->getErrorDescription());
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
 
