@@ -81,7 +81,7 @@ class CreateUserObserver implements ObserverInterface
 
     public function execute(Observer $observer)
     {
-        if (!$this->config->getEnabledFrontendCreate()) {
+        if (!$this->config->isEnabledFrontendCreate()) {
             return;
         }
 

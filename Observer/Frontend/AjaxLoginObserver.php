@@ -65,7 +65,7 @@ class AjaxLoginObserver implements ObserverInterface
 
     public function execute(Observer $observer)
     {
-        if (!$this->config->getEnabledFrontendLogin()) {
+        if (!$this->config->isEnabledFrontendLogin()) {
             return;
         }
 

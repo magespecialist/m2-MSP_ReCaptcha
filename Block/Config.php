@@ -56,10 +56,10 @@ class Config extends Template
             'badge' => $this->config->getFrontendPosition(),
             'theme' => $this->config->getFrontendTheme(),
             'enabled' => [
-                'login' => $this->config->getEnabledFrontendLogin(),
-                'create' => $this->config->getEnabledFrontendCreate(),
-                'forgot' => $this->config->getEnabledFrontendForgot(),
-                'contact' => $this->config->getEnabledFrontendContact(),
+                'login' => $this->config->isEnabledFrontendLogin(),
+                'create' => $this->config->isEnabledFrontendCreate(),
+                'forgot' => $this->config->isEnabledFrontendForgot(),
+                'contact' => $this->config->isEnabledFrontendContact(),
             ]
         ];
     }

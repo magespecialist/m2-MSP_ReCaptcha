@@ -86,7 +86,7 @@ class Config
      * Return true if enabled on backend
      * @return bool
      */
-    public function getEnabledBackend()
+    public function isEnabledBackend()
     {
         if (!$this->getPrivateKey() || !$this->getPublicKey()) {
             return false;
@@ -99,7 +99,7 @@ class Config
      * Return true if enabled on frontend
      * @return bool
      */
-    public function getEnabledFrontend()
+    public function isEnabledFrontend()
     {
         if (!$this->getPrivateKey() || !$this->getPublicKey()) {
             return false;
@@ -112,9 +112,9 @@ class Config
      * Return true if enabled on frontend login
      * @return bool
      */
-    public function getEnabledFrontendLogin()
+    public function isEnabledFrontendLogin()
     {
-        if (!$this->getEnabledFrontend()) {
+        if (!$this->isEnabledFrontend()) {
             return false;
         }
 
@@ -125,9 +125,9 @@ class Config
      * Return true if enabled on frontend forgot password
      * @return bool
      */
-    public function getEnabledFrontendForgot()
+    public function isEnabledFrontendForgot()
     {
-        if (!$this->getEnabledFrontend()) {
+        if (!$this->isEnabledFrontend()) {
             return false;
         }
 
@@ -138,9 +138,9 @@ class Config
      * Return true if enabled on frontend contact
      * @return bool
      */
-    public function getEnabledFrontendContact()
+    public function isEnabledFrontendContact()
     {
-        if (!$this->getEnabledFrontend()) {
+        if (!$this->isEnabledFrontend()) {
             return false;
         }
 
@@ -151,9 +151,9 @@ class Config
      * Return true if enabled on frontend create user
      * @return bool
      */
-    public function getEnabledFrontendCreate()
+    public function isEnabledFrontendCreate()
     {
-        if (!$this->getEnabledFrontend()) {
+        if (!$this->isEnabledFrontend()) {
             return false;
         }
 

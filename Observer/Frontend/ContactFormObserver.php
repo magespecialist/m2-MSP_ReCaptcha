@@ -72,7 +72,7 @@ class ContactFormObserver implements ObserverInterface
 
     public function execute(Observer $observer)
     {
-        if (!$this->config->getEnabledFrontendContact()) {
+        if (!$this->config->isEnabledFrontendContact()) {
             return;
         }
 

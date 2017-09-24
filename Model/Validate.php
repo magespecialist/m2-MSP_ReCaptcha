@@ -93,29 +93,31 @@ class Validate implements ValidateInterface
 
         $userIp = $this->remoteAddress->getRemoteAddress();
 
-        $reCatchaResponse = $this->request->getParam('g-recaptcha-response', '');
+        $reCaptchaResponse = $this->request->getParam('g-recaptcha-response', '');
 
         // Check if it is a JSON payload
-        if (!$reCatchaResponse) {
+        if (!$reCaptchaResponse) {
             $content = $this->request->getContent();
             if ($content) {
                 try {
                     $jsonParams = $this->jsonDecoder->decode($content);
                     if (isset($jsonParams['g-recaptcha-response'])) {
-                        $reCatchaResponse = $jsonParams['g-recaptcha-response'];
+                        $reCaptchaResponse = $jsonParams['g-recaptcha-response'];
                     }
                 } catch (\Exception $e) {
-                    $reCatchaResponse = '';
+                    $reCaptchaResponse = '';
                 }
             }
         }
 
-        if (!$reCatchaResponse) {
+        if (!$reCaptchaResponse) {
             return false;
         }
 
+        // @codingStandardsIgnoreStart
         $reCaptcha = new ReCaptcha($secret);
-        $res = $reCaptcha->verify($reCatchaResponse, $userIp);
+        // @codingStandardsIgnoreEnd
+        $res = $reCaptcha->verify($reCaptchaResponse, $userIp);
 
         return $res->isSuccess();
     }

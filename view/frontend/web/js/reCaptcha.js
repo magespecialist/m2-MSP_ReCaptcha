@@ -11,94 +11,122 @@
  * obtain it through the world-wide-web, please send an email
  * to info@magespecialist.it so we can send you a copy immediately.
  *
- * @category   MSP
- * @package    MSP_ReCaptcha
  * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/*browser:true jquery:true*/
-/*global define*/
+'use strict';
+
 define(
-  [
-    'uiComponent',
-    'jquery',
-    'ko',
-    'MSP_ReCaptcha/js/registry',
-    'https://www.google.com/recaptcha/api.js'
-  ],
-  function (Component, $, ko, registry, reCaptcha) {
-    'use strict';
+    [
+        'uiComponent',
+        'jquery',
+        'ko',
+        'MSP_ReCaptcha/js/registry',
+        'https://www.google.com/recaptcha/api.js'
+    ],
+    function (Component, $, ko, registry) {
 
-    return Component.extend({
-      defaults: {
-        template: 'MSP_ReCaptcha/reCaptcha'
-      },
-      getIsVisible: function () {
-        return window.mspReCaptchaConfig.enabled[this.zone];
-      },
-      reCaptchaCallback: function (token) {
-        if (window.mspReCaptchaConfig.size === 'invisible') {
-          this.tokenField.value = token;
-          this.$parentForm.submit();
-        }
-      },
-      initCaptcha: function () {
-        if (this.captchaInitialized) {
-          return;
-        }
+        return Component.extend({
+            defaults: {
+                template: 'MSP_ReCaptcha/reCaptcha'
+            },
 
-        this.captchaInitialized = true;
+            /**
+             * Return true if reCaptcha is visible
+             * @returns {Boolean}
+             */
+            getIsVisible: function () {
+                return window.mspReCaptchaConfig.enabled[this.zone];
+            },
 
-        var $parentForm = $('#' + this.getReCaptchaId()).parents('form');
-        var me = this;
+            /**
+             * Recaptcha callback
+             * @param {String} token
+             */
+            reCaptchaCallback: function (token) {
+                if (window.mspReCaptchaConfig.size === 'invisible') {
+                    this.tokenField.value = token;
+                    this.$parentForm.submit();
+                }
+            },
 
-        var widgetId = grecaptcha.render(this.getReCaptchaId(), {
-          'sitekey': window.mspReCaptchaConfig.siteKey,
-          'theme': window.mspReCaptchaConfig.theme,
-          'size': window.mspReCaptchaConfig.size,
-          'badge': this.badge ? this.badge : window.mspReCaptchaConfig.badge,
-          'callback': function (token) { me.reCaptchaCallback(token); }
-        });
+            /**
+             * Initialize reCaptcha after first rendering
+             */
+            initCaptcha: function () {
+                var me = this,
+                    $parentForm,
+                    widgetId,
+                    listeners;
 
-        if (window.mspReCaptchaConfig.size === 'invisible') {
-          $parentForm.submit(function (event) {
-            if (!me.tokenField.value) {
-              grecaptcha.execute(widgetId);
-              event.preventDefault(event);
-              event.stopImmediatePropagation();
+                if (this.captchaInitialized) {
+                    return;
+                }
+
+                this.captchaInitialized = true;
+
+                $parentForm = $('#' + this.getReCaptchaId()).parents('form');
+                me = this;
+
+                widgetId = grecaptcha.render(this.getReCaptchaId(), {
+                    'sitekey': window.mspReCaptchaConfig.siteKey,
+                    'theme': window.mspReCaptchaConfig.theme,
+                    'size': window.mspReCaptchaConfig.size,
+                    'badge': this.badge ? this.badge : window.mspReCaptchaConfig.badge,
+                    'callback': function (token) {
+                        me.reCaptchaCallback(token);
+                    }
+                });
+
+                if (window.mspReCaptchaConfig.size === 'invisible') {
+                    $parentForm.submit(function (event) {
+                        if (!me.tokenField.value) {
+                            grecaptcha.execute(widgetId);
+                            event.preventDefault(event);
+                            event.stopImmediatePropagation();
+                        }
+                    });
+
+                    // Move our (last) handler topmost. We need this to avoid submit bindings with ko.
+                    listeners = $._data($parentForm[0], 'events').submit;
+
+                    listeners.unshift(listeners.pop());
+
+                    // Create a virtual token field
+                    this.tokenField = $('<input type="text" name="token" style="display: none" />')[0];
+                    this.$parentForm = $parentForm;
+                    $parentForm.append(this.tokenField);
+                } else {
+                    this.tokenField = null;
+                }
+
+                registry.ids.push(this.getReCaptchaId());
+                registry.captchaList.push(widgetId);
+                registry.tokenFields.push(this.tokenField);
+
+            },
+
+            /**
+             * Render reCaptcha
+             */
+            renderReCaptcha: function () {
+                if (this.getIsVisible()) {
+                    this.initCaptcha();
+                }
+            },
+
+            /**
+             * Get reCaptcha ID
+             * @returns {String}
+             */
+            getReCaptchaId: function () {
+                if (!this.reCaptchaId) {
+                    return 'msp-recaptcha';
+                }
+
+                return this.reCaptchaId;
             }
-          });
-
-          // Move our (last) handler topmost. We need this to avoid submit bindings with ko.
-          var listeners = $._data($parentForm[0], 'events').submit;
-          listeners.unshift(listeners.pop());
-
-          // Create a virtual token field
-          this.tokenField = $('<input type="text" name="token" style="display: none" />')[0];
-          this.$parentForm = $parentForm;
-          $parentForm.append(this.tokenField);
-        } else {
-          this.tokenField = null;
-        }
-
-        registry.ids.push(this.getReCaptchaId());
-        registry.captchaList.push(widgetId);
-        registry.tokenFields.push(this.tokenField);
-
-      },
-      renderReCaptcha: function () {
-        if (this.getIsVisible()) {
-          this.initCaptcha();
-        }
-      },
-      getReCaptchaId: function () {
-        if (!this.reCaptchaId) {
-          return 'msp-recaptcha';
-        }
-
-        return this.reCaptchaId;
-      }
-    });
-  }
+        });
+    }
 );

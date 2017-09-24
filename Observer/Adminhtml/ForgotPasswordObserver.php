@@ -64,7 +64,7 @@ class ForgotPasswordObserver implements ObserverInterface
 
     public function execute(Observer $observer)
     {
-        if (!$this->config->getEnabledBackend()) {
+        if (!$this->config->isEnabledBackend()) {
             return;
         }
 

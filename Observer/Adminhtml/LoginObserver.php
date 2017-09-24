@@ -46,9 +46,12 @@ class LoginObserver implements ObserverInterface
         $this->config = $config;
     }
 
+    /**
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
+     */
     public function execute(Observer $observer)
     {
-        if (!$this->config->getEnabledBackend()) {
+        if (!$this->config->isEnabledBackend()) {
             return;
         }
 
