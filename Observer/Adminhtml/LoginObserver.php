@@ -20,6 +20,7 @@
 
 namespace MSP\ReCaptcha\Observer\Adminhtml;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
@@ -44,14 +45,21 @@ class LoginObserver implements ObserverInterface
      */
     private $remoteAddress;
 
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
     public function __construct(
         ValidateInterface $validate,
         Config $config,
-        RemoteAddress $remoteAddress
+        RemoteAddress $remoteAddress,
+        RequestInterface $request
     ) {
         $this->validate = $validate;
         $this->config = $config;
         $this->remoteAddress = $remoteAddress;
+        $this->request = $request;
     }
 
     /**
@@ -65,11 +73,7 @@ class LoginObserver implements ObserverInterface
             return;
         }
 
-        /** @var \Magento\Framework\App\Action\Action $controller */
-        $controller = $observer->getControllerAction();
-        $request = $controller->getRequest();
-
-        $reCaptchaResponse = $request->getParam(ValidateInterface::PARAM_RECAPTCHA_RESPONSE);
+        $reCaptchaResponse = $this->request->getParam(ValidateInterface::PARAM_RECAPTCHA_RESPONSE);
         $remoteIp = $this->remoteAddress->getRemoteAddress();
 
         if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
