@@ -40,5 +40,13 @@
                 <enabled_create>1</enabled_create>
             </frontend>
         </msp_securitysuite_recaptcha>
+        <dev>
+            <js>
+                <minify_exclude>
+                    google.com
+                    gstatic.com
+                </minify_exclude>
+            </js>
+        </dev>
     </default>
 </config>
