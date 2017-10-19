@@ -29,6 +29,7 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
 use MSP\ReCaptcha\Model\Config;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 class LoginObserver implements ObserverInterface
 {
@@ -62,13 +63,19 @@ class LoginObserver implements ObserverInterface
      */
     private $customerUrl;
 
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
     public function __construct(
         ValidateInterface $validate,
         Config $config,
         ManagerInterface $messageManager,
         SessionManagerInterface $sessionManager,
         ActionFlag $actionFlag,
-        Url $customerUrl
+        Url $customerUrl,
+        RemoteAddress $remoteAddress
     ) {
         $this->validate = $validate;
         $this->config = $config;
@@ -76,17 +83,23 @@ class LoginObserver implements ObserverInterface
         $this->sessionManager = $sessionManager;
         $this->actionFlag = $actionFlag;
         $this->customerUrl = $customerUrl;
+        $this->remoteAddress = $remoteAddress;
     }
 
     public function execute(Observer $observer)
     {
-        if (!$this->config->getEnabledFrontendLogin()) {
+        if (!$this->config->isEnabledFrontendLogin()) {
             return;
         }
 
+        /** @var \Magento\Framework\App\Action\Action $controller */
         $controller = $observer->getControllerAction();
+        $request = $controller->getRequest();
 
-        if (!$this->validate->validate()) {
+        $reCaptchaResponse = $request->getParam(ValidateInterface::PARAM_RECAPTCHA_RESPONSE);
+        $remoteIp = $this->remoteAddress->getRemoteAddress();
+
+        if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
             $beforeUrl = $this->sessionManager->getBeforeAuthUrl();
             $url = $beforeUrl ?: $this->customerUrl->getLoginUrl();
 

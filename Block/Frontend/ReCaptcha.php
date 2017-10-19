@@ -21,7 +21,6 @@
 
 namespace MSP\ReCaptcha\Block\Frontend;
 
-use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\View\Element\Template;
 use MSP\ReCaptcha\Model\Config;
 
@@ -31,26 +30,20 @@ class ReCaptcha extends Template
      * @var Config
      */
     private $config;
+
     /**
      * @var array
      */
     private $data;
 
-    /**
-     * @var EncoderInterface
-     */
-    private $encoder;
-
     public function __construct(
         Template\Context $context,
         Config $config,
-        EncoderInterface $encoder,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->config = $config;
         $this->data = $data;
-        $this->encoder = $encoder;
     }
 
     /**

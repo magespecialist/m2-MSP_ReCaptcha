@@ -20,103 +20,44 @@
 
 namespace MSP\ReCaptcha\Model;
 
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
-use Magento\Framework\Json\DecoderInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
-use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
-use Magento\Framework\Event\ManagerInterface as EventInterface;
 use ReCaptcha\ReCaptcha;
-use Magento\Framework\App\RequestInterface;
 
 class Validate implements ValidateInterface
 {
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
-     * @var RemoteAddress
-     */
-    private $remoteAddress;
-
     /**
      * @var Config
      */
     private $config;
 
-    /**
-     * @var DecoderInterface
-     */
-    private $jsonDecoder;
-
-    /**
-     * @var EventInterface
-     */
-    private $event;
-
     public function __construct(
-        RequestInterface $request,
-        RemoteAddress $remoteAddress,
-        Config $config,
-        DecoderInterface $jsonDecoder,
-        EventInterface $event
+        Config $config
     ) {
-        $this->request = $request;
-        $this->remoteAddress = $remoteAddress;
         $this->config = $config;
-        $this->jsonDecoder = $jsonDecoder;
-        $this->event = $event;
     }
 
     /**
      * Return true if reCaptcha validation has passed
+     * @param string $reCaptchaResponse
+     * @param string $remoteIp
      * @return bool
      */
-    public function validate()
-    {
-        if (!$this->_validate()) {
-            $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
-                'module' => 'MSP_ReCaptcha',
-                'message' => 'Invalid reCaptcha',
-            ]);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    protected function _validate()
+    public function validate($reCaptchaResponse, $remoteIp)
     {
         $secret = $this->config->getPrivateKey();
 
-        $userIp = $this->remoteAddress->getRemoteAddress();
+        if ($reCaptchaResponse) {
+            // @codingStandardsIgnoreStart
+            $reCaptcha = new ReCaptcha($secret);
+            // @codingStandardsIgnoreEmd
 
-        $reCatchaResponse = $this->request->getParam('g-recaptcha-response', '');
+            $res = $reCaptcha->verify($reCaptchaResponse, $remoteIp);
 
-        // Check if it is a JSON payload
-        if (!$reCatchaResponse) {
-            $content = $this->request->getContent();
-            if ($content) {
-                try {
-                    $jsonParams = $this->jsonDecoder->decode($content);
-                    if (isset($jsonParams['g-recaptcha-response'])) {
-                        $reCatchaResponse = $jsonParams['g-recaptcha-response'];
-                    }
-                } catch (\Exception $e) {
-                    $reCatchaResponse = '';
-                }
+            if ($res->isSuccess()) {
+                return true;
             }
         }
 
-        if (!$reCatchaResponse) {
-            return false;
-        }
-
-        $reCaptcha = new ReCaptcha($secret);
-        $res = $reCaptcha->verify($reCatchaResponse, $userIp);
-
-        return $res->isSuccess();
+        return false;
     }
 }

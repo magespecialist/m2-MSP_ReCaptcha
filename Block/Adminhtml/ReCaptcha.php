@@ -78,6 +78,6 @@ class ReCaptcha extends Template
      */
     public function canDisplayCaptcha()
     {
-        return $this->config->getEnabledBackend();
+        return $this->config->isEnabledBackend();
     }
 }

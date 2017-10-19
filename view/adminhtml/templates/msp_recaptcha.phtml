@@ -20,7 +20,7 @@
 
 /** @var $block MSP\ReCaptcha\Block\Adminhtml\ReCaptcha */
 ?>
-<?php if ($block->canDisplayCaptcha()): ?>
+<?php if ($block->canDisplayCaptcha()) : ?>
 <div class="admin__field field-recaptcha">
     <div class="g-recaptcha"
          data-sitekey="<?php echo $block->getPublicKey() ?>"
