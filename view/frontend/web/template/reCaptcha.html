@@ -18,11 +18,13 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 -->
-<!-- ko if: (getIsVisible())-->
-<div class="g-recaptcha" data-bind="{
+<!-- ko if: (getIsVisible()) -->
+<div data-bind="{
     attr: {
-        'id': getReCaptchaId()
+        'id': getReCaptchaId() + '-wrapper'
     },
     'afterRender': renderReCaptcha()
-}"></div>
+}">
+    <div class="g-recaptcha" ></div>
+</div>
 <!-- /ko -->

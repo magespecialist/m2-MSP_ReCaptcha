@@ -57,6 +57,8 @@ define(
             initCaptcha: function () {
                 var me = this,
                     $parentForm,
+                    $wrapper,
+                    $reCaptcha,
                     widgetId,
                     listeners;
 
@@ -66,7 +68,19 @@ define(
 
                 this.captchaInitialized = true;
 
-                $parentForm = $('#' + this.getReCaptchaId()).parents('form');
+                /*
+                 * Workaround for data-bind issue:
+                 * We cannot use data-bind to link a dynamic id to our component
+                 * See: https://stackoverflow.com/questions/46657573/recaptcha-the-bind-parameter-must-be-an-element-or-id
+                 *
+                 * We create a wrapper element with a wrapping id and we inject the real ID with jQuery.
+                 * In this way we have no data-bind attribute at all in our reCaptcha div
+                 */
+                $wrapper = $('#' + this.getReCaptchaId() + '-wrapper');
+                $reCaptcha = $wrapper.find('.g-recaptcha');
+                $reCaptcha.attr('id', this.getReCaptchaId());
+
+                $parentForm = $wrapper.parents('form');
                 me = this;
 
                 // eslint-disable-next-line no-undef
@@ -92,7 +106,6 @@ define(
 
                     // Move our (last) handler topmost. We need this to avoid submit bindings with ko.
                     listeners = $._data($parentForm[0], 'events').submit;
-
                     listeners.unshift(listeners.pop());
 
                     // Create a virtual token field
@@ -113,8 +126,12 @@ define(
              * Render reCaptcha
              */
             renderReCaptcha: function () {
+                var me = this;
+
                 if (this.getIsVisible()) {
-                    this.initCaptcha();
+                    setTimeout(function () {
+                        me.initCaptcha();
+                    }, 100);
                 }
             },
 
