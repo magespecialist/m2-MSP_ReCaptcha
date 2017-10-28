@@ -20,41 +20,62 @@
 
 namespace MSP\ReCaptcha\Setup;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use MSP\SecuritySuiteCommon\Model\ConfigMigration;
 
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var ConfigMigration
+     * @var ScopeConfigInterface
      */
-    private $configMigration;
+    private $scopeConfig;
 
     public function __construct(
-        ConfigMigration $configMigration
+        ScopeConfigInterface $scopeConfig
     ) {
-        $this->configMigration = $configMigration;
+        $this->scopeConfig = $scopeConfig;
     }
 
-    protected function upgradeTo010100(ModuleDataSetupInterface $setup)
+    /**
+     * Move config from srcPath to dstPath
+     * @param ModuleDataSetupInterface $setup
+     * @param string $srcPath
+     * @param string $dstPath
+     */
+    private function moveConfig(ModuleDataSetupInterface $setup, $srcPath, $dstPath)
     {
-        $this->configMigration->doConfigMigration(
+        $value = $this->scopeConfig->getValue($srcPath);
+
+        if (is_array($value)) {
+            foreach (array_keys($value) as $k) {
+                $this->moveConfig($setup, $srcPath . '/' . $k, $dstPath . '/' . $k);
+            }
+        } else {
+            $connection = $setup->getConnection();
+            $configData = $setup->getTable('core_config_data');
+            $connection->update($configData, ['path' => $dstPath], 'path='.$connection->quote($srcPath));
+        }
+    }
+
+    private function upgradeTo010100(ModuleDataSetupInterface $setup)
+    {
+        $this->moveConfig(
             $setup,
             'msp_securitysuite/recaptcha',
             'msp_securitysuite_recaptcha/general'
         );
     }
 
-    protected function upgradeTo010101(ModuleDataSetupInterface $setup)
+    private function upgradeTo010101(ModuleDataSetupInterface $setup)
     {
-        $this->configMigration->doConfigMigration(
+        $this->moveConfig(
             $setup,
             'msp_securitysuite_recaptcha/general/enabled_frontend',
             'msp_securitysuite_recaptcha/frontend/enabled'
         );
-        $this->configMigration->doConfigMigration(
+        $this->moveConfig(
             $setup,
             'msp_securitysuite_recaptcha/general/enabled_backend',
             'msp_securitysuite_recaptcha/backend/enabled'
