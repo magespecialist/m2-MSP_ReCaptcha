@@ -30,4 +30,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Asset\Minification">
+        <plugin name="msp-exclude" type="MSP\ReCaptcha\Plugin\ExcludeFromMinification" />
+    </type>
 </config>
