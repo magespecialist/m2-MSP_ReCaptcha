@@ -105,7 +105,7 @@ class LoginObserver implements ObserverInterface
 
             $this->messageManager->addErrorMessage($this->config->getErrorDescription());
             $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
-            $controller->getResponse()->setRedirect($url, ['_secure' => true]);
+            $controller->getResponse()->setRedirect($url);
         }
     }
 }
