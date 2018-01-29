@@ -129,8 +129,11 @@ define(
                 var me = this;
 
                 if (this.getIsVisible()) {
-                    setTimeout(function () {
-                        me.initCaptcha();
+                    var initCaptchaInterval = setInterval(function () {
+                        if (window.grecaptcha) {
+                            clearInterval(initCaptchaInterval);
+                            me.initCaptcha();
+                        }
                     }, 100);
                 }
             },
