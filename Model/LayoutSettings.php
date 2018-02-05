@@ -18,37 +18,31 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace MSP\ReCaptcha\Block;
+namespace MSP\ReCaptcha\Model;
 
-use Magento\Framework\View\Element\Template;
 
-class Config extends Template
+class LayoutSettings
 {
     /**
-     * @var \MSP\ReCaptcha\Model\Config
+     * @var Config
      */
     private $config;
 
     /**
-     * @var array
+     * LayoutSettings constructor.
+     * @param Config $config
      */
-    private $data;
-
     public function __construct(
-        Template\Context $context,
-        \MSP\ReCaptcha\Model\Config $config,
-        array $data = []
+        Config $config
     ) {
-        parent::__construct($context, $data);
         $this->config = $config;
-        $this->data = $data;
     }
 
     /**
      * Return captcha config for frontend
      * @return array
      */
-    public function getCaptchaConfig()
+    public function getCaptchaSettings()
     {
         return [
             'siteKey' => $this->config->getPublicKey(),

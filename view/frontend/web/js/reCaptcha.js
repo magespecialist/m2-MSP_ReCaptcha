@@ -37,7 +37,7 @@ define(
              * @returns {Boolean}
              */
             getIsVisible: function () {
-                return window.mspReCaptchaConfig.enabled[this.zone];
+                return this.settings.enabled[this.zone];
             },
 
             /**
@@ -45,7 +45,7 @@ define(
              * @param {String} token
              */
             reCaptchaCallback: function (token) {
-                if (window.mspReCaptchaConfig.size === 'invisible') {
+                if (this.settings.size === 'invisible') {
                     this.tokenField.value = token;
                     this.$parentForm.submit();
                 }
@@ -85,16 +85,16 @@ define(
 
                 // eslint-disable-next-line no-undef
                 widgetId = grecaptcha.render(this.getReCaptchaId(), {
-                    'sitekey': window.mspReCaptchaConfig.siteKey,
-                    'theme': window.mspReCaptchaConfig.theme,
-                    'size': window.mspReCaptchaConfig.size,
-                    'badge': this.badge ? this.badge : window.mspReCaptchaConfig.badge,
+                    'sitekey': this.settings.siteKey,
+                    'theme': this.settings.theme,
+                    'size': this.settings.size,
+                    'badge': this.badge ? this.badge : this.settings.badge,
                     'callback': function (token) { // jscs:ignore jsDoc
                         me.reCaptchaCallback(token);
                     }
                 });
 
-                if (window.mspReCaptchaConfig.size === 'invisible') {
+                if (this.settings.size === 'invisible') {
                     $parentForm.submit(function (event) {
                         if (!me.tokenField.value) {
                             // eslint-disable-next-line no-undef
