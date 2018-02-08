@@ -57,13 +57,20 @@
     </virtualType>
 
     <!-- Forgot password -->
+    <virtualType name="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\ForgotPassword"
+                 type="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\SimpleUrlProvider">
+        <arguments>
+            <argument name="urlPath" xsi:type="string">*/*/forgotpassword</argument>
+            <argument name="urlParams" xsi:type="array">
+                <item name="_secure" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="MSP\ReCaptcha\Model\Provider\Failure\ForgotPasswordObserver"
                  type="MSP\ReCaptcha\Model\Provider\Failure\ObserverRedirectFailure">
         <arguments>
-            <argument name="redirectUrl" xsi:type="string">*/*/forgotpassword</argument>
-            <argument name="redirectUrlParams" xsi:type="array">
-                <item name="_secure" xsi:type="boolean">true</item>
-            </argument>
+            <argument name="redirectUrlProvider"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\ForgotPassword</argument>
         </arguments>
     </virtualType>
     <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\ForgotPassword"
@@ -85,13 +92,20 @@
     </virtualType>
 
     <!-- Create User -->
+    <virtualType name="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\CreateUser"
+                 type="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\SimpleUrlProvider">
+        <arguments>
+            <argument name="urlPath" xsi:type="string">*/*/create</argument>
+            <argument name="urlParams" xsi:type="array">
+                <item name="_secure" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="MSP\ReCaptcha\Model\Provider\Failure\CreateUserObserver"
                  type="MSP\ReCaptcha\Model\Provider\Failure\ObserverRedirectFailure">
         <arguments>
-            <argument name="redirectUrl" xsi:type="string">*/*/create</argument>
-            <argument name="redirectUrlParams" xsi:type="array">
-                <item name="_secure" xsi:type="boolean">true</item>
-            </argument>
+            <argument name="redirectUrlProvider"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\CreateUser</argument>
         </arguments>
     </virtualType>
     <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\CreateUser"
@@ -113,10 +127,17 @@
     </virtualType>
 
     <!-- Contact Form -->
+    <virtualType name="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\ContactForm"
+                 type="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\SimpleUrlProvider">
+        <arguments>
+            <argument name="urlPath" xsi:type="string">contact/index/index</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="MSP\ReCaptcha\Model\Provider\Failure\ContactFormObserver"
                  type="MSP\ReCaptcha\Model\Provider\Failure\ObserverRedirectFailure">
         <arguments>
-            <argument name="redirectUrl" xsi:type="string">contact/index/index</argument>
+            <argument name="redirectUrlProvider"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\ContactForm</argument>
         </arguments>
     </virtualType>
     <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\ContactForm"

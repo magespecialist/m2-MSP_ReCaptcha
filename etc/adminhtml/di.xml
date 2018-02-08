@@ -41,10 +41,17 @@
     </virtualType>
 
     <!-- Backend Forgot password -->
+    <virtualType name="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\ForgotPassword"
+                 type="MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\SimpleUrlProvider">
+        <arguments>
+            <argument name="urlPath" xsi:type="string">*/*/forgotpassword</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="MSP\ReCaptcha\Model\Provider\Failure\ForgotPasswordObserver"
                  type="MSP\ReCaptcha\Model\Provider\Failure\ObserverRedirectFailure">
         <arguments>
-            <argument name="redirectUrl" xsi:type="string">*/*/forgotpassword</argument>
+            <argument name="redirectUrlProvider"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\ForgotPassword</argument>
         </arguments>
     </virtualType>
     <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Adminhtml\ForgotPassword"

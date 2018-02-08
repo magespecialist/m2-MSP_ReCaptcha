@@ -51,16 +51,6 @@ class ObserverRedirectFailure implements FailureProviderInterface
     private $redirectUrlProvider;
 
     /**
-     * @var string
-     */
-    private $redirectUrl;
-
-    /**
-     * @var array
-     */
-    private $redirectUrlParams;
-
-    /**
      * @var UrlInterface
      */
     private $url;
@@ -72,37 +62,19 @@ class ObserverRedirectFailure implements FailureProviderInterface
      * @param Config $config
      * @param UrlInterface $url
      * @param RedirectUrlProviderInterface|null $redirectUrlProvider
-     * @param string $redirectUrl
-     * @param array $redirectUrlParams
      */
     public function __construct(
         MessageManagerInterface $messageManager,
         ActionFlag $actionFlag,
         Config $config,
         UrlInterface $url,
-        RedirectUrlProviderInterface $redirectUrlProvider = null,
-        $redirectUrl = '',
-        $redirectUrlParams = null
+        RedirectUrlProviderInterface $redirectUrlProvider = null
     ) {
         $this->messageManager = $messageManager;
         $this->actionFlag = $actionFlag;
         $this->config = $config;
         $this->redirectUrlProvider = $redirectUrlProvider;
-        $this->redirectUrl = $redirectUrl;
-        $this->redirectUrlParams = $redirectUrlParams;
         $this->url = $url;
-
-        if (($this->redirectUrlProvider === null) && !$this->redirectUrl) {
-            throw new \InvalidArgumentException('Must specify one of redirectUrlProvider and redirectUrl');
-        }
-
-        if (($this->redirectUrlProvider !== null) && $this->redirectUrl) {
-            throw new \InvalidArgumentException('You cannot specify both redirectUrlProvider and redirectUrl');
-        }
-
-        if (($this->redirectUrlParams !== null) && !$this->redirectUrl) {
-            throw new \InvalidArgumentException('redirectUrlParams can only be specified when using redirectUrl');
-        }
     }
 
     /**
@@ -111,10 +83,6 @@ class ObserverRedirectFailure implements FailureProviderInterface
      */
     private function getUrl()
     {
-        if ($this->redirectUrl) {
-            return $this->url->getUrl($this->redirectUrl, $this->redirectUrlParams);
-        }
-
         return $this->redirectUrlProvider->execute();
     }
 
