@@ -38,12 +38,19 @@
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\RedirectUrl\BeforeAuthUrlProvider</argument>
         </arguments>
     </virtualType>
-    <virtualType name="MSP\ReCaptcha\Observer\Frontend\LoginObserver"
-                 type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
+    <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\Login"
+                 type="MSP\ReCaptcha\Model\IsCheckRequired">
         <arguments>
             <argument name="enableConfigFlag"
                       xsi:type="string">msp_securitysuite_recaptcha/frontend/enabled_login</argument>
             <argument name="area" xsi:type="string">frontend</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MSP\ReCaptcha\Observer\Frontend\LoginObserver"
+                 type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
+        <arguments>
+            <argument name="isCheckRequired"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\Login</argument>
             <argument name="failureProvider"
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\LoginObserver</argument>
         </arguments>
@@ -59,12 +66,19 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="MSP\ReCaptcha\Observer\Frontend\ForgotPasswordObserver"
-                 type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
+    <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\ForgotPassword"
+                 type="MSP\ReCaptcha\Model\IsCheckRequired">
         <arguments>
             <argument name="enableConfigFlag"
                       xsi:type="string">msp_securitysuite_recaptcha/frontend/enabled_forgot</argument>
             <argument name="area" xsi:type="string">frontend</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MSP\ReCaptcha\Observer\Frontend\ForgotPasswordObserver"
+                 type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
+        <arguments>
+            <argument name="isCheckRequired"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\ForgotPassword</argument>
             <argument name="failureProvider"
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\ForgotPasswordObserver</argument>
         </arguments>
@@ -80,12 +94,19 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="MSP\ReCaptcha\Observer\Frontend\CreateUserObserver"
-                 type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
+    <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\CreateUser"
+                 type="MSP\ReCaptcha\Model\IsCheckRequired">
         <arguments>
             <argument name="enableConfigFlag"
                       xsi:type="string">msp_securitysuite_recaptcha/frontend/enabled_create</argument>
             <argument name="area" xsi:type="string">frontend</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MSP\ReCaptcha\Observer\Frontend\CreateUserObserver"
+                 type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
+        <arguments>
+            <argument name="isCheckRequired"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\CreateUser</argument>
             <argument name="failureProvider"
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\CreateUserObserver</argument>
         </arguments>
@@ -98,12 +119,19 @@
             <argument name="redirectUrl" xsi:type="string">contact/index/index</argument>
         </arguments>
     </virtualType>
-    <virtualType name="MSP\ReCaptcha\Observer\Frontend\CreateUserObserver"
-                 type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
+    <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\ContactForm"
+                 type="MSP\ReCaptcha\Model\IsCheckRequired">
         <arguments>
             <argument name="enableConfigFlag"
                       xsi:type="string">msp_securitysuite_recaptcha/frontend/enabled_contact</argument>
             <argument name="area" xsi:type="string">frontend</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MSP\ReCaptcha\Observer\Frontend\ContactFormObserver"
+                 type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
+        <arguments>
+            <argument name="isCheckRequired"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\ContactForm</argument>
             <argument name="failureProvider"
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\ContactFormObserver</argument>
         </arguments>
@@ -113,15 +141,15 @@
     <virtualType name="MSP\ReCaptcha\Observer\Frontend\AjaxLoginObserver"
                  type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
         <arguments>
-            <argument name="enableConfigFlag"
-                      xsi:type="string">msp_securitysuite_recaptcha/frontend/enabled_login</argument>
+            <argument name="isCheckRequired"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\IsCheckRequired\Frontend\Login</argument>
             <argument name="responseProvider"
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Response\AjaxResponseProvider</argument>
-            <argument name="area" xsi:type="string">frontend</argument>
             <argument name="failureProvider"
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\AjaxResponseFailure</argument>
         </arguments>
     </virtualType>
+    
     <type name="Magento\Customer\Block\Account\AuthenticationPopup">
         <plugin sortOrder="1" name="mSPReCaptchaAuthenticationPopup"
                 type="MSP\ReCaptcha\Plugin\Block\Account\AuthenticationPopupPlugin"/>

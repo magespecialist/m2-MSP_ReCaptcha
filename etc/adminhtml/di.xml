@@ -24,10 +24,17 @@
     <preference for="MSP\ReCaptcha\Api\ValidateInterface" type="MSP\ReCaptcha\Model\Validate"/>
 
     <!-- Backend Login -->
+    <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Adminhtml\Login"
+                 type="MSP\ReCaptcha\Model\IsCheckRequired">
+        <arguments>
+            <argument name="area" xsi:type="string">adminhtml</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="MSP\ReCaptcha\Observer\Adminhtml\LoginObserver"
                  type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
         <arguments>
-            <argument name="area" xsi:type="string">adminhtml</argument>
+            <argument name="isCheckRequired"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\IsCheckRequired\Adminhtml\Login</argument>
             <argument name="failureProvider"
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\AuthenticationExceptionFailure</argument>
         </arguments>
@@ -40,13 +47,20 @@
             <argument name="redirectUrl" xsi:type="string">*/*/forgotpassword</argument>
         </arguments>
     </virtualType>
+    <virtualType name="MSP\ReCaptcha\Model\Provider\IsCheckRequired\Adminhtml\ForgotPassword"
+                 type="MSP\ReCaptcha\Model\IsCheckRequired">
+        <arguments>
+            <argument name="area" xsi:type="string">adminhtml</argument>
+            <argument name="requireRequestParam" xsi:type="string">email</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="MSP\ReCaptcha\Observer\Adminhtml\ForgotPasswordObserver"
                  type="MSP\ReCaptcha\Observer\ReCaptchaObserver">
         <arguments>
-            <argument name="area" xsi:type="string">adminhtml</argument>
+            <argument name="isCheckRequired"
+                      xsi:type="object">MSP\ReCaptcha\Model\Provider\IsCheckRequired\Adminhtml\ForgotPassword</argument>
             <argument name="failureProvider"
                       xsi:type="object">MSP\ReCaptcha\Model\Provider\Failure\ForgotPasswordObserver</argument>
-            <argument name="requireRequestParam" xsi:type="string">email</argument>
         </arguments>
     </virtualType>
 </config>

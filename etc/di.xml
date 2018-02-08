@@ -38,4 +38,7 @@
     <!-- Default HTTP response provider -->
     <preference for="MSP\ReCaptcha\Model\Provider\ResponseProviderInterface"
                 type="MSP\ReCaptcha\Model\Provider\Response\DefaultResponseProvider"/>
+
+    <preference for="MSP\ReCaptcha\Model\IsCheckRequiredInterface"
+                type="MSP\ReCaptcha\Model\IsCheckRequired"/>
 </config>

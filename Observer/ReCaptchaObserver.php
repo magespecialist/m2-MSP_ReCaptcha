@@ -20,15 +20,11 @@
 
 namespace MSP\ReCaptcha\Observer;
 
-use Magento\Framework\App\Area;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
-use Magento\Framework\Json\DecoderInterface;
 use MSP\ReCaptcha\Api\ValidateInterface;
-use MSP\ReCaptcha\Model\Config;
+use MSP\ReCaptcha\Model\IsCheckRequiredInterface;
 use MSP\ReCaptcha\Model\Provider\FailureProviderInterface;
 use MSP\ReCaptcha\Model\Provider\ResponseProviderInterface;
 
@@ -38,26 +34,6 @@ class ReCaptchaObserver implements ObserverInterface
      * @var FailureProviderInterface
      */
     private $failureProvider;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var string $area
-     */
-    private $area;
-
-    /**
-     * @var string
-     */
-    private $enableConfigFlag;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
 
     /**
      * @var ValidateInterface
@@ -70,78 +46,35 @@ class ReCaptchaObserver implements ObserverInterface
     private $remoteAddress;
 
     /**
-     * @var DecoderInterface
-     */
-    private $decoder;
-
-    /**
      * @var ResponseProviderInterface
      */
     private $responseProvider;
 
     /**
-     * @var string
+     * @var IsCheckRequiredInterface
      */
-    private $requireRequestParam;
+    private $isCheckRequired;
 
     /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
-     * LoginObserver constructor.
+     * ReCaptchaObserver constructor.
      * @param ResponseProviderInterface $responseProvider
-     * @param RequestInterface $request
      * @param ValidateInterface $validate
      * @param FailureProviderInterface $failureProvider
-     * @param Config $config
-     * @param ScopeConfigInterface $scopeConfig
      * @param RemoteAddress $remoteAddress
-     * @param DecoderInterface $decoder
-     * @param string $area
-     * @param string $enableConfigFlag
-     * @param bool $requireRequestParam
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param IsCheckRequiredInterface $isCheckRequired
      */
     public function __construct(
         ResponseProviderInterface $responseProvider,
-        RequestInterface $request,
         ValidateInterface $validate,
         FailureProviderInterface $failureProvider,
-        Config $config,
-        ScopeConfigInterface $scopeConfig,
         RemoteAddress $remoteAddress,
-        DecoderInterface $decoder,
-        $area,
-        $enableConfigFlag = '',
-        $requireRequestParam = false
+        IsCheckRequiredInterface $isCheckRequired
     ) {
         $this->responseProvider = $responseProvider;
-        $this->request = $request;
         $this->validate = $validate;
         $this->failureProvider = $failureProvider;
-        $this->config = $config;
-        $this->scopeConfig = $scopeConfig;
         $this->remoteAddress = $remoteAddress;
-        $this->decoder = $decoder;
-        $this->area = $area;
-        $this->enableConfigFlag = $enableConfigFlag;
-        $this->requireRequestParam = $requireRequestParam;
-    }
-
-    /**
-     * Return true if check should be skipped
-     * @return bool
-     */
-    private function isCheckNotRequired()
-    {
-        return (
-            (($this->area === Area::AREA_ADMINHTML) && !$this->config->isEnabledBackend()) ||
-            (($this->area === Area::AREA_FRONTEND) && !$this->config->isEnabledFrontend()) ||
-            ($this->enableConfigFlag && !$this->scopeConfig->getValue($this->enableConfigFlag)) ||
-            ($this->requireRequestParam && !$this->request->getParam($this->requireRequestParam))
-        );
+        $this->isCheckRequired = $isCheckRequired;
     }
 
     /**
@@ -150,15 +83,13 @@ class ReCaptchaObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->isCheckNotRequired()) {
-            return;
-        }
+        if ($this->isCheckRequired->execute()) {
+            $reCaptchaResponse = $this->responseProvider->execute();
+            $remoteIp = $this->remoteAddress->getRemoteAddress();
 
-        $reCaptchaResponse = $this->responseProvider->execute();
-        $remoteIp = $this->remoteAddress->getRemoteAddress();
-
-        if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
-            $this->failureProvider->execute($observer);
+            if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
+                $this->failureProvider->execute($observer);
+            }
         }
     }
 }
