@@ -21,7 +21,7 @@
 namespace MSP\ReCaptcha\Model\Provider\Failure;
 
 use Magento\Framework\App\ActionFlag;
-use Magento\Framework\Event\Observer;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\Json\EncoderInterface;
 use MSP\ReCaptcha\Model\Config;
@@ -56,20 +56,17 @@ class AjaxResponseFailure implements FailureProviderInterface
 
     /**
      * Handle reCaptcha failure
-     * @param Observer $observer
+     * @param ResponseInterface $response
      * @return void
      */
-    public function execute(Observer $observer)
+    public function execute(ResponseInterface $response)
     {
-        /** @var \Magento\Framework\App\Action\Action $controller */
-        $controller = $observer->getControllerAction();
-
         $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
 
         $jsonPayload = $this->encoder->encode([
             'errors' => true,
             'message' => $this->config->getErrorDescription(),
         ]);
-        $controller->getResponse()->representJson($jsonPayload);
+        $response->representJson($jsonPayload);
     }
 }

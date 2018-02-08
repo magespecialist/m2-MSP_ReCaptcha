@@ -20,14 +20,14 @@
 
 namespace MSP\ReCaptcha\Model\Provider;
 
-use Magento\Framework\Event\Observer;
+use Magento\Framework\App\ResponseInterface;
 
 interface FailureProviderInterface
 {
     /**
      * Handle reCaptcha failure
-     * @param Observer $observer
+     * @param ResponseInterface $response
      * @return void
      */
-    public function execute(Observer $observer);
+    public function execute(ResponseInterface $response);
 }

@@ -87,8 +87,11 @@ class ReCaptchaObserver implements ObserverInterface
             $reCaptchaResponse = $this->responseProvider->execute();
             $remoteIp = $this->remoteAddress->getRemoteAddress();
 
+            /** @var \Magento\Framework\App\Action\Action $controller */
+            $controller = $observer->getControllerAction();
+
             if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
-                $this->failureProvider->execute($observer);
+                $this->failureProvider->execute($controller->getResponse());
             }
         }
     }

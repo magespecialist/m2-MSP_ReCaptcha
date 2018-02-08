@@ -21,7 +21,7 @@
 namespace MSP\ReCaptcha\Model\Provider\Failure;
 
 use Magento\Framework\App\ActionFlag;
-use Magento\Framework\Event\Observer;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\UrlInterface;
@@ -88,17 +88,14 @@ class ObserverRedirectFailure implements FailureProviderInterface
 
     /**
      * Handle reCaptcha failure
-     * @param Observer $observer
+     * @param ResponseInterface $response
      * @return void
      */
-    public function execute(Observer $observer)
+    public function execute(ResponseInterface $response)
     {
-        /** @var \Magento\Framework\App\Action\Action $controller */
-        $controller = $observer->getControllerAction();
-
         $this->messageManager->addErrorMessage($this->config->getErrorDescription());
         $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
 
-        $controller->getResponse()->setRedirect($this->getUrl());
+        $response->setRedirect($this->getUrl());
     }
 }

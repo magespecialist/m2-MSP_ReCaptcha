@@ -20,11 +20,8 @@
 
 namespace MSP\ReCaptcha\Model\Provider\Failure;
 
-use Magento\Framework\App\ActionFlag;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\Plugin\AuthenticationException;
-use Magento\Framework\Json\EncoderInterface;
 use MSP\ReCaptcha\Model\Config;
 use MSP\ReCaptcha\Model\Provider\FailureProviderInterface;
 
@@ -43,12 +40,12 @@ class AuthenticationExceptionFailure implements FailureProviderInterface
 
     /**
      * Handle reCaptcha failure
-     * @param Observer $observer
+     * @param ResponseInterface $response
      * @return void
      * @throws AuthenticationException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(Observer $observer)
+    public function execute(ResponseInterface $response)
     {
         throw new AuthenticationException($this->config->getErrorDescription());
     }
