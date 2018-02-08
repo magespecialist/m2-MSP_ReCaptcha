@@ -46,7 +46,7 @@ class AjaxResponseProvider implements ResponseProviderInterface
 
     /**
      * Handle reCaptcha failure
-     * @return bool
+     * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute()

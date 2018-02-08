@@ -24,7 +24,7 @@ interface ResponseProviderInterface
 {
     /**
      * Handle reCaptcha failure
-     * @return bool
+     * @return string
      */
     public function execute();
 }
