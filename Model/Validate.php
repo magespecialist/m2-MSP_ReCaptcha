@@ -30,6 +30,10 @@ class Validate implements ValidateInterface
      */
     private $config;
 
+    /**
+     * Validate constructor.
+     * @param Config $config
+     */
     public function __construct(
         Config $config
     ) {

@@ -40,6 +40,12 @@ class SimpleUrlProvider implements RedirectUrlProviderInterface
      */
     private $url;
 
+    /**
+     * SimpleUrlProvider constructor.
+     * @param UrlInterface $url
+     * @param $urlPath
+     * @param null $urlParams
+     */
     public function __construct(
         UrlInterface $url,
         $urlPath,

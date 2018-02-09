@@ -32,6 +32,10 @@ class AuthenticationExceptionFailure implements FailureProviderInterface
      */
     private $config;
 
+    /**
+     * AuthenticationExceptionFailure constructor.
+     * @param Config $config
+     */
     public function __construct(
         Config $config
     ) {

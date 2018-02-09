@@ -24,6 +24,13 @@ use \Magento\Framework\View\Asset\Minification;
 
 class ExcludeFromMinification
 {
+    /**
+     * @param Minification $subject
+     * @param callable $proceed
+     * @param $contentType
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function aroundGetExcludes(Minification $subject, callable $proceed, $contentType)
     {
         $result = $proceed($contentType);

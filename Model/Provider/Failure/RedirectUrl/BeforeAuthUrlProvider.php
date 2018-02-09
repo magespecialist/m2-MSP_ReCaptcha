@@ -36,6 +36,11 @@ class BeforeAuthUrlProvider implements RedirectUrlProviderInterface
      */
     private $url;
 
+    /**
+     * BeforeAuthUrlProvider constructor.
+     * @param SessionManagerInterface $sessionManager
+     * @param Url $url
+     */
     public function __construct(
         SessionManagerInterface $sessionManager,
         Url $url

@@ -44,6 +44,12 @@ class AjaxResponseFailure implements FailureProviderInterface
      */
     private $config;
 
+    /**
+     * AjaxResponseFailure constructor.
+     * @param ActionFlag $actionFlag
+     * @param EncoderInterface $encoder
+     * @param Config $config
+     */
     public function __construct(
         ActionFlag $actionFlag,
         EncoderInterface $encoder,

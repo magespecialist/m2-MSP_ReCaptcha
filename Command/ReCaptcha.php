@@ -39,6 +39,11 @@ class ReCaptcha extends Command
      */
     private $cacheManager;
 
+    /**
+     * ReCaptcha constructor.
+     * @param ConfigInterface $config
+     * @param Manager $cacheManager
+     */
     public function __construct(
         ConfigInterface $config,
         Manager $cacheManager
@@ -48,6 +53,9 @@ class ReCaptcha extends Command
         $this->cacheManager = $cacheManager;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function configure()
     {
         $this->setName('msp:security:recaptcha:disable');
@@ -57,6 +65,7 @@ class ReCaptcha extends Command
     }
 
     /**
+     * @inheritdoc
      * @SuppressWarnings("PHPMD.UnusedFormalParameter")
      */
     protected function execute(InputInterface $input, OutputInterface $output)

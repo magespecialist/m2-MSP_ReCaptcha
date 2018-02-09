@@ -36,6 +36,11 @@ class AjaxResponseProvider implements ResponseProviderInterface
      */
     private $decoder;
 
+    /**
+     * AjaxResponseProvider constructor.
+     * @param RequestInterface $request
+     * @param DecoderInterface $decoder
+     */
     public function __construct(
         RequestInterface $request,
         DecoderInterface $decoder

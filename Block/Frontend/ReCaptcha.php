@@ -53,6 +53,14 @@ class ReCaptcha extends Template
      */
     private $layoutSettings;
 
+    /**
+     * ReCaptcha constructor.
+     * @param Template\Context $context
+     * @param DecoderInterface $decoder
+     * @param EncoderInterface $encoder
+     * @param LayoutSettings $layoutSettings
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
         DecoderInterface $decoder,
