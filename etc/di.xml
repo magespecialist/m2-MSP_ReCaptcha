@@ -41,4 +41,18 @@
 
     <preference for="MSP\ReCaptcha\Model\IsCheckRequiredInterface"
                 type="MSP\ReCaptcha\Model\IsCheckRequired"/>
+
+    <!-- Set sensitive information -->
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="msp_securitysuite_recaptcha/general/public_key" xsi:type="string">1</item>
+                <item name="msp_securitysuite_recaptcha/general/private_key" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="msp_securitysuite_recaptcha/general/public_key" xsi:type="string">1</item>
+                <item name="msp_securitysuite_recaptcha/general/private_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
