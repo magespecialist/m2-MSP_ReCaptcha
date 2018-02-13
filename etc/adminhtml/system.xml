@@ -108,6 +108,18 @@
                         <field id="type">recaptcha</field>
                     </depends>
                 </field>
+                <field id="lang" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Language Code</label>
+                    <comment><![CDATA[
+                    <div>
+                        See <strong><a target="_blank" href="https://developers.google.com/recaptcha/docs/language">supported Language codes</a></strong>.
+                    </div>
+                ]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
                 <field id="size" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1"
                        showInStore="0" canRestore="1">
                     <label>Size</label>

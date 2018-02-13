@@ -34,6 +34,7 @@
                 <type>standard</type>
                 <position>inline</position>
                 <theme>light</theme>
+                <lang>en</lang>
                 <enabled_login>1</enabled_login>
                 <enabled_forgot>1</enabled_forgot>
                 <enabled_contact>1</enabled_contact>

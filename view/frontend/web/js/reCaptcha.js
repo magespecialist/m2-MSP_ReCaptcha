@@ -22,14 +22,54 @@ define(
         'uiComponent',
         'jquery',
         'ko',
-        'MSP_ReCaptcha/js/registry',
-        'https://www.google.com/recaptcha/api.js'
+        'MSP_ReCaptcha/js/registry'
     ],
-    function (Component, $, ko, registry) {
+    function (Component, $, ko, registry, undefined) {
 
         return Component.extend({
+
             defaults: {
                 template: 'MSP_ReCaptcha/reCaptcha'
+            },
+            _isApiRegistered: undefined,
+
+            initialize: function () {
+              this._super();
+              this._loadApi();
+            },
+
+            /**
+              * Loads recaptchaapi API and triggers event, when loaded
+              * @private
+              */
+            _loadApi: function () {
+                var element, scriptTag;
+
+                if (this._isApiRegistered !== undefined) {
+                    if (this._isApiRegistered === true) {
+                        $(window).trigger('recaptchaapiready');
+                    }
+
+                    return;
+                }
+                this._isApiRegistered = false;
+
+                // global function
+                window.globalOnRecaptchaOnLoadCallback = function() {
+                    this._isApiRegistered = true;
+                    $(window).trigger('recaptchaapiready');
+                }.bind(this);
+
+                element   = document.createElement('script');
+                scriptTag = document.getElementsByTagName('script')[0];
+
+                element.async = true;
+                element.src = 'https://www.google.com/recaptcha/api.js'
+                    + '?onload=globalOnRecaptchaOnLoadCallback&render=explicit'
+                    + '&hl=' + this.settings.lang;
+
+                scriptTag.parentNode.insertBefore(element, scriptTag);
+
             },
 
             /**
@@ -89,6 +129,7 @@ define(
                     'theme': this.settings.theme,
                     'size': this.settings.size,
                     'badge': this.badge ? this.badge : this.settings.badge,
+                    'lang': this.settings.lang,
                     'callback': function (token) { // jscs:ignore jsDoc
                         me.reCaptchaCallback(token);
                     }
