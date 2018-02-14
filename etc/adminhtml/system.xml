@@ -113,6 +113,7 @@
                     <label>Language Code</label>
                     <comment><![CDATA[
                     <div>
+                        Optional. Forces the widget to render in a specific language. Auto-detects the user's language if unspecified.<br />
                         See <strong><a target="_blank" href="https://developers.google.com/recaptcha/docs/language">supported Language codes</a></strong>.
                     </div>
                 ]]></comment>

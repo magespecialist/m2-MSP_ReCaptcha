@@ -66,7 +66,7 @@ define(
                 element.async = true;
                 element.src = 'https://www.google.com/recaptcha/api.js'
                     + '?onload=globalOnRecaptchaOnLoadCallback&render=explicit'
-                    + '&hl=' + this.settings.lang;
+                    + (this.settings.lang ? '&hl=' + this.settings.lang : '');
 
                 scriptTag.parentNode.insertBefore(element, scriptTag);
 
@@ -129,7 +129,6 @@ define(
                     'theme': this.settings.theme,
                     'size': this.settings.size,
                     'badge': this.badge ? this.badge : this.settings.badge,
-                    'lang': this.settings.lang,
                     'callback': function (token) { // jscs:ignore jsDoc
                         me.reCaptchaCallback(token);
                     }
