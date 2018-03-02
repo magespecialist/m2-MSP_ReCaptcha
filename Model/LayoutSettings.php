@@ -49,6 +49,7 @@ class LayoutSettings
             'size' => $this->config->getFrontendSize(),
             'badge' => $this->config->getFrontendPosition(),
             'theme' => $this->config->getFrontendTheme(),
+            'lang' => $this->config->getLanguageCode(),
             'enabled' => [
                 'login' => $this->config->isEnabledFrontendLogin(),
                 'create' => $this->config->isEnabledFrontendCreate(),
