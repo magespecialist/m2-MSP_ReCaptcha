@@ -22,6 +22,7 @@ namespace MSP\ReCaptcha\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Phrase;
+use Magento\Store\Model\ScopeInterface;
 use MSP\ReCaptcha\Model\Config\Source\Type;
 
 class Config
@@ -30,6 +31,7 @@ class Config
     const XML_PATH_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/frontend/enabled';
 
     const XML_PATH_TYPE_FRONTEND = 'msp_securitysuite_recaptcha/frontend/type';
+    const XML_PATH_LANGUAGE_CODE = 'msp_securitysuite_recaptcha/frontend/lang';
 
     const XML_PATH_POSITION_FRONTEND = 'msp_securitysuite_recaptcha/frontend/position';
 
@@ -229,5 +231,14 @@ class Config
     public function getFrontendType()
     {
         return $this->scopeConfig->getValue(static::XML_PATH_TYPE_FRONTEND);
+    }
+
+    /**
+     * Get language code
+     * @return string
+     */
+    public function getLanguageCode()
+    {
+        return $this->scopeConfig->getValue(static::XML_PATH_LANGUAGE_CODE, ScopeInterface::SCOPE_STORE);
     }
 }
