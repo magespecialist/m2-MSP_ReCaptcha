@@ -91,7 +91,7 @@ class ReCaptchaObserver implements ObserverInterface
             $controller = $observer->getControllerAction();
 
             if (!$this->validate->validate($reCaptchaResponse, $remoteIp)) {
-                $this->failureProvider->execute($controller->getResponse());
+                $this->failureProvider->execute($controller ? $controller->getResponse(): null);
             }
         }
     }

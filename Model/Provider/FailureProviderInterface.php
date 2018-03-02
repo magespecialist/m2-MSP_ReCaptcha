@@ -29,5 +29,5 @@ interface FailureProviderInterface
      * @param ResponseInterface $response
      * @return void
      */
-    public function execute(ResponseInterface $response);
+    public function execute(ResponseInterface $response = null);
 }

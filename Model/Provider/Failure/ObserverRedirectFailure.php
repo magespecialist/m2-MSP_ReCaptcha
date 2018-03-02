@@ -91,7 +91,7 @@ class ObserverRedirectFailure implements FailureProviderInterface
      * @param ResponseInterface $response
      * @return void
      */
-    public function execute(ResponseInterface $response)
+    public function execute(ResponseInterface $response = null)
     {
         $this->messageManager->addErrorMessage($this->config->getErrorDescription());
         $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);

@@ -49,7 +49,7 @@ class AuthenticationExceptionFailure implements FailureProviderInterface
      * @throws AuthenticationException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(ResponseInterface $response)
+    public function execute(ResponseInterface $response = null)
     {
         throw new AuthenticationException($this->config->getErrorDescription());
     }
