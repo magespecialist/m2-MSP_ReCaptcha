@@ -22,54 +22,14 @@ define(
         'uiComponent',
         'jquery',
         'ko',
-        'MSP_ReCaptcha/js/registry'
+        'MSP_ReCaptcha/js/registry',
+        'https://www.google.com/recaptcha/api.js'
     ],
-    function (Component, $, ko, registry, undefined) {
+    function (Component, $, ko, registry) {
 
         return Component.extend({
-
             defaults: {
                 template: 'MSP_ReCaptcha/reCaptcha'
-            },
-            _isApiRegistered: undefined,
-
-            initialize: function () {
-              this._super();
-              this._loadApi();
-            },
-
-            /**
-              * Loads recaptchaapi API and triggers event, when loaded
-              * @private
-              */
-            _loadApi: function () {
-                var element, scriptTag;
-
-                if (this._isApiRegistered !== undefined) {
-                    if (this._isApiRegistered === true) {
-                        $(window).trigger('recaptchaapiready');
-                    }
-
-                    return;
-                }
-                this._isApiRegistered = false;
-
-                // global function
-                window.globalOnRecaptchaOnLoadCallback = function() {
-                    this._isApiRegistered = true;
-                    $(window).trigger('recaptchaapiready');
-                }.bind(this);
-
-                element   = document.createElement('script');
-                scriptTag = document.getElementsByTagName('script')[0];
-
-                element.async = true;
-                element.src = 'https://www.google.com/recaptcha/api.js'
-                    + '?onload=globalOnRecaptchaOnLoadCallback&render=explicit'
-                    + (this.settings.lang ? '&hl=' + this.settings.lang : '');
-
-                scriptTag.parentNode.insertBefore(element, scriptTag);
-
             },
 
             /**
@@ -100,7 +60,8 @@ define(
                     $wrapper,
                     $reCaptcha,
                     widgetId,
-                    listeners;
+                    listeners,
+                    renderOptions;
 
                 if (this.captchaInitialized) {
                     return;
@@ -123,8 +84,7 @@ define(
                 $parentForm = $wrapper.parents('form');
                 me = this;
 
-                // eslint-disable-next-line no-undef
-                widgetId = grecaptcha.render(this.getReCaptchaId(), {
+                renderOptions = {
                     'sitekey': this.settings.siteKey,
                     'theme': this.settings.theme,
                     'size': this.settings.size,
@@ -132,7 +92,14 @@ define(
                     'callback': function (token) { // jscs:ignore jsDoc
                         me.reCaptchaCallback(token);
                     }
-                });
+                };
+
+                if (this.settings.lang) {
+                    renderOptions['hl'] = this.settings.lang;
+                }
+
+                // eslint-disable-next-line no-undef
+                widgetId = grecaptcha.render(this.getReCaptchaId(), renderOptions);
 
                 if (this.settings.size === 'invisible') {
                     $parentForm.submit(function (event) {
